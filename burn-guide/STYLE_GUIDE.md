@@ -12,6 +12,7 @@
 | `tokens.css` | The variable system. Locked block + theme block. |
 | `components.html` | Live gallery — every component rendered and labeled. Open it in a browser. |
 | `STYLE_GUIDE.md` | This document. Rules + the component reference + the content→component mapping. |
+| `PAGE_FORMAT.md` | Addendum. How a sheet migrates from scrolling HTML to a paginated **US-Letter PDF** — page geometry, cover, running header/footer, per-component break rules. |
 
 ---
 
