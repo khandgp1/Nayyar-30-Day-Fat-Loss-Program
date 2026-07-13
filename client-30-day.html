@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your 30-Day Fat Loss Plan</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap');
+
+  /* =====================================================================
+     DESIGN TOKENS  —  from burn-guide/tokens.css (LOCKED + "Burn" THEME)
+     ===================================================================== */
+  :root{
+    /* LOCKED — fonts */
+    --font-display:   'Space Grotesk', system-ui, sans-serif;
+    --font-mono:      'IBM Plex Mono', ui-monospace, monospace;
+    --font-editorial: 'Source Serif 4', Georgia, serif;
+    /* LOCKED — layout */
+    --maxw: 860px;
+    --gutter: 24px;
+    /* LOCKED — spacing */
+    --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+    --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-12: 48px;
+    --space-14: 56px; --space-18: 72px;
+    /* LOCKED — radii */
+    --radius-sm: 8px; --radius: 10px; --radius-pill: 999px;
+    --border-w: 1px;
+    /* LOCKED — type scale */
+    --fs-h1: clamp(2.4rem, 6vw, 4.2rem);
+    --fs-h2: clamp(1.6rem, 4vw, 2.2rem);
+    --fs-lead: 1.02rem;
+    --fs-label: 11px;
+    --fs-eyebrow: 12px;
+    --fs-data: 1.5rem;
+    --lh-body: 1.55;
+    /* LOCKED — letter-spacing */
+    --ls-label: 0.1em; --ls-eyebrow: 0.18em; --ls-tight: -0.02em;
+  }
+  :root{
+    /* THEME — "Burn" */
+    --bg: #101411; --bg-soft: #161b17; --card: #1b211c; --line: #2c352e;
+    --text: #e9ece7; --text-dim: #93a193; --text-mute: #5e6b60;
+    --accent-effort: #ff6a45; --accent-effort-dim: #6b3527;
+    --accent-recover: #6be3c4; --accent-recover-dim: #2c4f47;
+    --accent-warn: #f0c75e;
+    --grid-line: rgba(255,255,255,0.018);
+  }
+
+  /* =====================================================================
+     BASE + SHELL
+     ===================================================================== */
+  *{ box-sizing: border-box; margin:0; padding:0; }
+  html{ scroll-behavior: smooth; }
+  body{
+    background: var(--bg); color: var(--text);
+    font-family: var(--font-display); line-height: var(--lh-body);
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before{
+    content:""; position: fixed; inset:0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 48px 48px; pointer-events: none; z-index: 0;
+  }
+  .wrap{ max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); position: relative; z-index: 1; }
+
+  /* Section rhythm (replaces gallery chrome; same border/padding cadence) */
+  .section{ padding: 52px 0; border-bottom: 1px solid var(--line); }
+  .section:last-of-type{ border-bottom: none; }
+
+  /* Body copy inside a section */
+  .body{ margin-top: 22px; max-width: 660px; }
+  .body p{ color: var(--text-dim); font-size: var(--fs-lead); margin-bottom: 14px; }
+  .body p:last-child{ margin-bottom: 0; }
+  .body strong{ color: var(--text); font-weight: 600; }
+  .kick{ font-family: var(--font-mono); font-size: var(--fs-label); text-transform: uppercase; letter-spacing: var(--ls-label); color: var(--text-mute); display:block; margin-bottom: 4px; }
+  .exit{ font-family: var(--font-mono); font-size: 12px; color: var(--text-mute); margin-top: 22px; letter-spacing: 0.03em; }
+  .exit b{ color: var(--accent-recover); font-weight: 600; }
+  .caption{ font-family: var(--font-mono); font-size: 11px; color: var(--text-mute); letter-spacing: 0.04em; margin-top: 12px; }
+
+  /* =====================================================================
+     COMPONENTS  —  from burn-guide/components.html (verbatim styles)
+     ===================================================================== */
+
+  /* 01 HERO */
+  .tag{ font-family: var(--font-mono); font-size: var(--fs-eyebrow); letter-spacing: var(--ls-eyebrow); text-transform: uppercase; color: var(--accent-effort); margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+  .tag::before{ content:""; width: 8px; height: 8px; background: var(--accent-effort); border-radius: 50%; display:inline-block; box-shadow: 0 0 0 4px var(--accent-effort-dim); }
+  .hero h1{ font-size: var(--fs-h1); font-weight: 700; letter-spacing: var(--ls-tight); line-height: 1.04; margin-bottom: 22px; }
+  .hero h1 em{ font-style: normal; color: var(--accent-effort); }
+  .hero-sub{ font-family: var(--font-editorial); font-style: italic; color: var(--text-dim); font-size: 1.15rem; max-width: 560px; margin-bottom: 36px; }
+
+  /* 02 STATLINE */
+  .statline{ display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .statline .stat{ padding: 16px 14px; border-right: 1px solid var(--line); }
+  .statline .stat:last-child{ border-right: none; }
+  .stat-num{ font-family: var(--font-mono); font-size: var(--fs-data); font-weight: 600; color: var(--text); }
+  .stat-label{ font-size: var(--fs-label); text-transform: uppercase; letter-spacing: var(--ls-label); color: var(--text-mute); margin-top: 4px; }
+
+  /* 03 SECTION HEADER */
+  .eyebrow{ font-family: var(--font-mono); font-size: var(--fs-eyebrow); letter-spacing: var(--ls-eyebrow); text-transform: uppercase; color: var(--text-mute); margin-bottom: 12px; }
+  h2{ font-size: var(--fs-h2); font-weight: 600; letter-spacing: -0.01em; margin-bottom: 18px; }
+  p.lead{ color: var(--text-dim); max-width: 620px; font-size: var(--fs-lead); }
+
+  /* 06 DATA TABLE + 07 TABLE TAG */
+  table{ width: 100%; border-collapse: collapse; margin-top: 24px; font-size: 0.95rem; }
+  th{ text-align: left; font-family: var(--font-mono); font-size: var(--fs-label); text-transform: uppercase; letter-spacing: var(--ls-label); color: var(--text-mute); padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  td{ padding: 12px; border-bottom: 1px solid var(--line); color: var(--text-dim); }
+  tr:last-child td{ border-bottom: none; }
+  td.num, th.num{ font-family: var(--font-mono); text-align: right; color: var(--text); }
+
+  /* 08 TWO-CARD COMPARE */
+  .compare-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 28px; }
+  .c-card{ border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+  .c-card h3{ font-family: var(--font-mono); font-size: 13px; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 14px; }
+  .c-card.positive h3{ color: var(--accent-recover); }
+  .c-card.negative h3{ color: var(--accent-effort); }
+  .c-card ul{ list-style: none; }
+  .c-card li{ padding: 7px 0; border-bottom: 1px solid var(--line); color: var(--text-dim); font-size: 0.94rem; }
+  .c-card li:last-child{ border-bottom: none; }
+  .arrow-note{ margin-top: 18px; font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-mute); padding: 14px 16px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--line); }
+  .arrow-note .target{ color: var(--text); }
+
+  /* 09 SCHEDULE STRIP */
+  .schedule{ margin-top: 32px; }
+  .schedule-row{ display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+  .cell{ border-radius: var(--radius); padding: 18px 10px; text-align: center; border: 1px solid var(--line); position: relative; transition: transform 0.15s ease; }
+  .cell:hover{ transform: translateY(-3px); }
+  .cell-num{ font-family: var(--font-mono); font-size: 11px; color: var(--text-mute); margin-bottom: 10px; }
+  .cell-type{ font-weight: 600; font-size: 0.95rem; }
+  .cell.type-a{ background: linear-gradient(180deg, var(--bg-soft), var(--card)); }
+  .cell.type-a .cell-type{ color: var(--accent-effort); }
+  .cell.type-b{ background: linear-gradient(180deg, var(--accent-recover-dim), var(--card)); border-color: var(--accent-recover-dim); }
+  .cell.type-b .cell-type{ color: var(--accent-recover); }
+  .cell.badge::after{ content: attr(data-badge); position: absolute; top: 6px; right: 6px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; color: var(--accent-warn); border: 1px solid var(--accent-warn); border-radius: 4px; padding: 1px 4px; }
+  .schedule-legend{ display: flex; gap: 24px; margin-top: 18px; flex-wrap: wrap; }
+  .schedule-legend span{ font-family: var(--font-mono); font-size: 12px; color: var(--text-mute); display: flex; align-items: center; gap: 8px; }
+  .swatch{ width: 12px; height: 12px; border-radius: 3px; display:inline-block; }
+  .swatch.a{ background: var(--accent-effort); }
+  .swatch.b{ background: var(--accent-recover); }
+  .swatch.badge{ border: 1px solid var(--accent-warn); }
+
+  /* 10 TIMELINE */
+  .timeline{ margin-top: 28px; border-left: 1px solid var(--line); padding-left: 28px; }
+  .tl-item{ position: relative; padding-bottom: 32px; }
+  .tl-item:last-child{ padding-bottom: 0; }
+  .tl-item::before{ content:""; position: absolute; left: -33px; top: 4px; width: 9px; height: 9px; background: var(--bg); border: 2px solid var(--accent-effort); border-radius: 50%; }
+  .tl-stage{ font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: var(--ls-label); color: var(--accent-effort); margin-bottom: 8px; }
+  .tl-item ul{ list-style: none; margin-top: 6px; }
+  .tl-item li{ color: var(--text-dim); padding: 4px 0; font-size: 0.95rem; }
+  .tl-item li::before{ content: "— "; color: var(--text-mute); }
+
+  /* 11 CALLOUT */
+  .callout{ margin-top: 28px; border: 1px solid var(--line); border-left: 3px solid var(--accent-warn); border-radius: var(--radius-sm); padding: 20px 22px; background: var(--bg-soft); }
+  .callout .c-label{ font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent-warn); margin-bottom: 8px; }
+  .callout p{ color: var(--text-dim); font-size: 0.95rem; }
+
+  /* 12 CHIP LIST */
+  .chip-list{ display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+  .chip{ font-family: var(--font-mono); font-size: 13px; padding: 7px 14px; border: 1px solid var(--line); border-radius: var(--radius-pill); color: var(--text-dim); }
+
+  /* 13 FOOTER */
+  footer{ padding: 48px 0 80px; font-family: var(--font-mono); font-size: 12px; color: var(--text-mute); letter-spacing: 0.04em; }
+
+  /* RESPONSIVE */
+  @media (max-width: 720px){
+    .statline{ grid-template-columns: repeat(2, 1fr); }
+    .statline .stat:nth-child(2){ border-right: none; }
+    .compare-grid{ grid-template-columns: 1fr; }
+    .schedule-row{ grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .cell{ padding: 10px 4px; }
+    .cell-type{ font-size: 0.72rem; }
+    .cell-num{ font-size: 9px; }
+    table{ font-size: 0.82rem; }
+    th, td{ padding: 8px 6px; }
+  }
+  @media (prefers-reduced-motion: reduce){ *{ transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO + STATLINE -->
+  <section class="section">
+    <div class="hero">
+      <div class="tag">30-Day Fat Loss · Your Program Sheet</div>
+      <h1>Thirty days. One <em>habit at a time.</em></h1>
+      <p class="hero-sub">Nothing you love gets banned. You add one small thing a day until, by the end, most of your day runs itself — before you make a single decision.</p>
+    </div>
+    <div class="statline">
+      <div class="stat"><div class="stat-num">30</div><div class="stat-label">Days</div></div>
+      <div class="stat"><div class="stat-num">2L</div><div class="stat-label">Water, morning</div></div>
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Foods you prep</div></div>
+      <div class="stat"><div class="stat-num">0</div><div class="stat-label">Foods banned</div></div>
+    </div>
+  </section>
+
+  <!-- 00 HOW THIS WORKS -->
+  <section class="section">
+    <div class="eyebrow">00 — How this works</div>
+    <h2>You add. You don't subtract.</h2>
+    <p class="lead">Every day installs one habit and keeps the ones before it. Your old foods aren't forbidden — the new ones just crowd them out. By Day 7 your morning runs on autopilot, and from there it only gets easier.</p>
+  </section>
+
+  <!-- WEEK 1 AT A GLANCE (Schedule Strip) -->
+  <section class="section">
+    <div class="eyebrow">Week 1 — At a glance</div>
+    <h2>The first seven days.</h2>
+    <p class="lead">Most days add one thing. One day is a breather. Day 3 is a taste checkpoint. That's the whole first week.</p>
+    <div class="schedule">
+      <div class="schedule-row">
+        <div class="cell type-a"><div class="cell-num">DAY 1</div><div class="cell-type">Water</div></div>
+        <div class="cell type-a"><div class="cell-num">DAY 2</div><div class="cell-type">Ritual</div></div>
+        <div class="cell type-a badge" data-badge="TASTE"><div class="cell-num">DAY 3</div><div class="cell-type">Check</div></div>
+        <div class="cell type-a"><div class="cell-num">DAY 4</div><div class="cell-type">Portion</div></div>
+        <div class="cell type-a"><div class="cell-num">DAY 5</div><div class="cell-type">Veg</div></div>
+        <div class="cell type-b"><div class="cell-num">DAY 6</div><div class="cell-type">Breather</div></div>
+        <div class="cell type-a badge" data-badge="WEEK 1"><div class="cell-num">DAY 7</div><div class="cell-type">Carb</div></div>
+      </div>
+      <div class="schedule-legend">
+        <span><span class="swatch a"></span> Install day — one new habit</span>
+        <span><span class="swatch b"></span> Breather — catch up, adjust</span>
+        <span><span class="swatch badge"></span> Checkpoint</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- DAY 0 -->
+  <section class="section">
+    <div class="eyebrow">Day 0 — Get set up</div>
+    <h2>Three things today. Then you start.</h2>
+    <p class="lead">No food changes yet — today is just tools and picks, so Day 1 has something to stand on.</p>
+    <div class="body">
+      <p><span class="kick">Task 1 · The scale</span>Buy a <strong>digital kitchen food scale that measures in grams</strong> — any brand, under $20. Get it <strong>today</strong> (in-store or same-day). It's the one tool everything else needs.</p>
+      <p><span class="kick">Task 2 · Yogurt recon</span>Buy <strong>plain 0% Greek yogurt</strong> — a few different brands. The only filter: the ingredients read <strong>milk + live cultures, nothing else</strong>. No added sugar, no "vanilla," no "honey" — those hide 10–15g of sugar. Send a <strong>photo of each tub's label</strong>.</p>
+      <p><span class="kick">Task 3 · Pick your proteins</span>From the list below, tell me your <strong>top 3</strong> — just the three you'd actually eat. It's not exhaustive; if you eat something lean that's missing, say so.</p>
+    </div>
+    <div class="chip-list">
+      <span class="chip">Tuna / chicken pouch (in water)</span>
+      <span class="chip">Pre-cooked chicken pouch</span>
+      <span class="chip">Frozen grilled chicken strips</span>
+      <span class="chip">Rotisserie chicken</span>
+      <span class="chip">Hard-boiled eggs</span>
+      <span class="chip">Deli turkey breast</span>
+      <span class="chip">Frozen white fish</span>
+      <span class="chip">Frozen salmon</span>
+      <span class="chip">Lean beef (90/10)</span>
+    </div>
+    <p class="exit">Done when: <b>scale in hand</b> · <b>yogurt labels sent</b> · <b>top 3 picked</b></p>
+  </section>
+
+  <!-- DAY 1 -->
+  <section class="section">
+    <div class="eyebrow">Day 1 — Water in, yogurt in</div>
+    <h2>Two easy installs.</h2>
+    <p class="lead">Light on purpose — this gives Day 0 room to finish.</p>
+    <div class="body">
+      <p><span class="kick">Every morning from now on</span>On waking, drink <strong>2 liters of water — before coffee, before food</strong>. Big bottle, first thing. That's the whole task. (No bottle with a steel or glass interior? Grab a good one today.)</p>
+      <p><span class="kick">Start the yogurt</span>Start eating the yogurt — <strong>any amount</strong>, a spoonful or half a tub. You bought a few brands: find the one you genuinely like. That's the one we build on.</p>
+    </div>
+  </section>
+
+  <!-- DAY 2 -->
+  <section class="section">
+    <div class="eyebrow">Day 2 — The evening ritual + your first meat</div>
+    <h2>Tonight, you prep tomorrow's breakfast.</h2>
+    <p class="lead">This is where the structure starts doing the work for you.</p>
+    <div class="body">
+      <p><span class="kick">The evening ritual — tonight, then every night</span>Weigh <strong>one serving of yogurt</strong> (serving size is on the tub) into a container, lid on, into the fridge. That's tomorrow's breakfast, already waiting. Your morning becomes: wake → water → the yogurt that's sitting there.</p>
+      <p><span class="kick">The meat run — buy, cook, eat today</span>From your top 3, <strong>pick one</strong>. Buy enough for the week, prepare it, and eat it — today. You're in the driver's seat on how it's made: seasoning, sides, your taste. Already-cooked options make this easy. Then send a quick report: a photo, what you picked, how you prepped it, and where you bought it.</p>
+    </div>
+  </section>
+
+  <!-- DAY 3 -->
+  <section class="section">
+    <div class="eyebrow">Day 3 — Taste check</div>
+    <h2>Does it actually taste good?</h2>
+    <p class="lead">A lean meat you only tolerate disappears from your plate by week two — so we fix taste now, before it becomes a problem.</p>
+    <div class="body">
+      <p>Be honest — <strong>"it was fine" counts as a no.</strong> Three ways this can go:</p>
+      <ul>
+        <li><strong>You liked it</strong> — great, keep it. We can still tune the seasoning if you want.</li>
+        <li><strong>Close but not there</strong> — let's make it better: seasoning, a sauce, a different cooking method. Small fixes beat starting over.</li>
+        <li><strong>Not working</strong> — swap it for another pick, no penalty. (Easiest option on the board if you want it: pre-cooked chicken breast strips — no prep, hard to get wrong.)</li>
+      </ul>
+      <p>If you swap, just <strong>repeat the meat run today</strong> with the new pick — buy, cook, eat, report. No days lost.</p>
+    </div>
+  </section>
+
+  <!-- DAY 4 -->
+  <section class="section">
+    <div class="eyebrow">Day 4 — Portion the meat</div>
+    <h2>The ritual grows one step.</h2>
+    <p class="lead">One thing worth knowing: meat is mostly water, so grams on the scale isn't grams of protein. You don't need the math — just a portion size.</p>
+    <div class="body">
+      <p><span class="kick">Tonight, then every night</span>After the yogurt, weigh out <strong>one portion of your cooked meat</strong> and add it to the fridge — ready to grab tomorrow. Scale tip: put the empty container on, hit <strong>tare/zero</strong>, then add the food so the scale reads just the meat.</p>
+    </div>
+    <table>
+      <thead><tr><th>Your protein</th><th class="num">One good portion</th></tr></thead>
+      <tbody>
+        <tr><td>Chicken / turkey breast, rotisserie (skin off)</td><td class="num">70–140 g</td></tr>
+        <tr><td>White fish (cod / tilapia / pollock)</td><td class="num">90–170 g</td></tr>
+        <tr><td>Salmon</td><td class="num">80–160 g</td></tr>
+        <tr><td>Lean beef (90/10)</td><td class="num">80–150 g</td></tr>
+        <tr><td>Tuna / chicken pouch or can</td><td class="num">1 pouch</td></tr>
+        <tr><td>Frozen grilled strips / deli turkey</td><td class="num">use the label</td></tr>
+        <tr><td>Hard-boiled eggs</td><td class="num">4–6 eggs</td></tr>
+      </tbody>
+    </table>
+    <p class="caption">Find your pick and weigh out about one portion per meal. Once your food is locked in, I'll give you one exact number for it.</p>
+    <div class="callout">
+      <div class="c-label">The one strict rule</div>
+      <p>Your prepped food is always the <strong style="color:var(--text)">first food you eat each day</strong>. Water first, then the containers, before anything else. Be strict about this one — everything you eat <em>after</em> it is still completely yours.</p>
+    </div>
+  </section>
+
+  <!-- DAY 5 -->
+  <section class="section">
+    <div class="eyebrow">Day 5 — A vegetable joins the stack</div>
+    <h2>The one food that makes everything after it easier.</h2>
+    <p class="lead">High-volume, fills you up, almost no calories — so every later change lands on someone who's already full.</p>
+    <div class="body">
+      <p><span class="kick">First — a quick check</span>Is broccoli a hard no? If so, we swap in <strong>green beans, cauliflower, or a mixed medley</strong> — same frozen steam-in-bag category, same task. No point installing a food you've already decided against.</p>
+      <p><span class="kick">Then — buy it, learn it, stack it</span>Grab a couple brands of <strong>frozen steam-in-bag</strong> vegetables. Learn it (it's a microwave and a few minutes), taste it today, and tonight add a serving to the prep — alongside the yogurt and the meat. Three containers now.</p>
+    </div>
+    <div class="compare-grid">
+      <div class="c-card positive">
+        <h3>Flavor freely</h3>
+        <ul>
+          <li>Salt, pepper, spices</li>
+          <li>Hot sauce, mustard, lemon</li>
+          <li>Light garlic-herb seasoning</li>
+          <li>Anything near-zero-calorie</li>
+        </ul>
+      </div>
+      <div class="c-card negative">
+        <h3>Skip these</h3>
+        <ul>
+          <li>Cheese sauce</li>
+          <li>Butter &amp; cream sauces</li>
+          <li>Sugary marinades / glazes</li>
+          <li>"Mac &amp;" anything</li>
+        </ul>
+      </div>
+    </div>
+    <div class="arrow-note">Seasoning yes, sauce no <span style="color:var(--text-mute)">→</span> <span class="target">a cheese-sauce bag can double the calories of the vegetable it coats.</span></div>
+  </section>
+
+  <!-- DAY 6 -->
+  <section class="section">
+    <div class="eyebrow">Day 6 — Catch up + a couple questions</div>
+    <h2>A breather, and a look ahead.</h2>
+    <p class="lead">Five days of stacking earns a day to close loose ends. Nothing new lands today.</p>
+    <div class="body">
+      <p>Anything from Day 0–5 that's still open, we finish. Anything that isn't clicking — a meat that's stalling, a step that keeps slipping — we talk through and fix.</p>
+      <p><span class="kick">Two quick things for later</span>First: roughly what time is the <strong>earliest</strong> you start eating, and the <strong>latest</strong>? Second: from these carbs, which would you <strong>actually eat</strong>? (Not exhaustive — tell me if a favorite's missing.)</p>
+    </div>
+    <div class="chip-list">
+      <span class="chip">White / brown rice</span>
+      <span class="chip">Potatoes</span>
+      <span class="chip">Sweet potatoes</span>
+      <span class="chip">Oats</span>
+      <span class="chip">Quinoa</span>
+      <span class="chip">Beans / lentils</span>
+      <span class="chip">Fruit</span>
+      <span class="chip">Corn tortillas</span>
+    </div>
+  </section>
+
+  <!-- DAY 7 -->
+  <section class="section">
+    <div class="eyebrow">Day 7 — Week one, done</div>
+    <h2>One week in. Your morning is owned.</h2>
+    <p class="lead">Genuinely — three foods adopted, a ritual running nightly, and not one thing you love has been banned. Three small moves close the week.</p>
+    <div class="body">
+      <p><span class="kick">Task 1 · One more bottle</span>Take your daily water count and <strong>add one more bottle</strong> — anywhere in the day. That's the new number. (Morning 2L is unchanged.)</p>
+      <p><span class="kick">Task 2 · A start line</span><strong>Never eat earlier than the time you already start eating.</strong> You already do this — now it's just a line. (Water, black coffee, and plain tea are always fine.)</p>
+      <p><span class="kick">Task 3 · Your first carb</span>From your list, we start with one pick. Buy enough for the week, and tonight add a serving to the prep — alongside the yogurt, meat, and vegetable. <strong>Four containers now.</strong></p>
+    </div>
+    <p class="exit">The board: <b>start-time → 2L water → prepped food first → your bottles through the day → prep tomorrow tonight.</b></p>
+  </section>
+
+  <!-- WEEKS 2-4 (Timeline + Callout) -->
+  <section class="section">
+    <div class="eyebrow">Weeks 2–4 — It keeps running</div>
+    <h2>Same board, small changes.</h2>
+    <p class="lead">The routine you built in week one is the whole engine. From here it just gets fine-tuned — and this is what a day looks like, every day.</p>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-stage">Morning</div>
+        <ul>
+          <li>Hold your start time — nothing before it</li>
+          <li>2 liters of water on waking</li>
+          <li>Your prepped containers first: yogurt, protein, vegetable, carb — before anything else</li>
+        </ul>
+      </div>
+      <div class="tl-item">
+        <div class="tl-stage">Through the day</div>
+        <ul>
+          <li>Your water bottles, spread out</li>
+          <li>After the prepped food, the rest of your eating is still yours</li>
+        </ul>
+      </div>
+      <div class="tl-item">
+        <div class="tl-stage">Evening</div>
+        <ul>
+          <li>Prep tomorrow's containers — same ritual, every night</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="c-label">What's next</div>
+      <p>Weeks 2–4 are personalized to you. I'll add <strong style="color:var(--text)">one small change at a time</strong> — a bit more protein, a portion tweak, a longer morning window, some daily walking — based on how your check-ins go. Nothing to memorize now; you'll get each step when it's your turn. And tell me how you're feeling — that's the most useful thing you can report.</p>
+    </div>
+  </section>
+
+  <!-- AFTER -->
+  <section class="section">
+    <div class="eyebrow">After — When the push ends</div>
+    <h2>The program doesn't leave you on its hardest week.</h2>
+    <p class="lead">When the final push is done, you go back to exactly the routine you ran before it — same containers, same rituals, same rhythm. Nothing new to learn; you already lived it.</p>
+    <div class="callout">
+      <div class="c-label">Heads up</div>
+      <p>Expect the scale to tick up a couple of pounds that week. That's <strong style="color:var(--text)">water coming back with your carbs, not fat</strong>. It's completely expected and completely fine — don't let it rattle you.</p>
+    </div>
+  </section>
+
+  <footer>30-Day Fat Loss — your program sheet. One habit at a time; nothing you love banned.</footer>
+
+</div>
+</body>
+</html>
