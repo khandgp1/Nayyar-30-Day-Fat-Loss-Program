@@ -12,7 +12,7 @@
 | `tokens.css` | The variable system. Locked block + theme block. |
 | `components.html` | Live gallery — every component rendered and labeled. Open it in a browser. |
 | `STYLE_GUIDE.md` | This document. Rules + the component reference + the content→component mapping. |
-| `PAGE_FORMAT.md` | Addendum. How a sheet migrates from scrolling HTML to a paginated **US-Letter PDF** — page geometry, cover, running header/footer, per-component break rules. |
+| `PAGE_FORMAT.md` | **Optional addendum — applies only on request when converting a sheet to PDF.** Page geometry, cover, running header/footer, and per-component break rules for the HTML→**US-Letter PDF** path. It does **not** change the screen HTML (which stays a single scrolling page) and ships no CSS into any sheet. |
 
 ---
 

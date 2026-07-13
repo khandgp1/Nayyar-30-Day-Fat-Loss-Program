@@ -9,6 +9,14 @@
 > **Status:** spec only. No `tokens.css` edits and no print stylesheet ship in
 > this phase. CSS shown below is *reference* the future workflow implements —
 > the same convention `STYLE_GUIDE.md` uses for component skeletons.
+>
+> **Scope — read this first.** This format is **opt-in and applied only when a
+> PDF is explicitly requested.** The screen HTML (`psmf-protocol.html`,
+> `client-30-day.html`, `components.html`) stays a single scrolling page and
+> must carry **none** of this — no `@page`, no `@media print`, no `break-*`
+> rules baked into a sheet. Everything here activates only at HTML→PDF
+> conversion time, on request. If you are not converting to PDF, this document
+> does not apply.
 
 ---
 
