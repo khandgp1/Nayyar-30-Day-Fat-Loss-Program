@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Field Manual — Component Gallery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+/* ---------- gallery chrome (not part of the system) ---------- */
+*{ box-sizing:border-box; }
+html,body{ margin:0; }
+body{
+  background:#20262e;
+  color:#cdd6df;
+  font-family:var(--font-mono);
+  padding:var(--space-12) var(--space-6);
+}
+.gallery{ max-width:960px; margin:0 auto; }
+.g-head{ margin-bottom:var(--space-16); }
+.g-head h1{
+  font-family:var(--font-display); font-weight:900; letter-spacing:var(--ls-tight);
+  color:#fff; font-size:2rem; margin:0 0 var(--space-3);
+}
+.g-head p{ font-size:13px; line-height:1.6; color:#8b97a4; margin:0; max-width:60ch; }
+.g-head .tag{ color:var(--accent-command); }
+
+.spec{ margin-bottom:var(--space-16); }
+.spec-head{
+  display:flex; align-items:baseline; gap:var(--space-3);
+  border-bottom:1px solid #39424d; padding-bottom:var(--space-3); margin-bottom:var(--space-5);
+}
+.spec-index{ color:var(--accent-command); font-weight:700; font-size:13px; }
+.spec-name{ color:#fff; font-family:var(--font-display); font-weight:600; font-size:15px; }
+.spec-surface{
+  margin-left:auto; font-size:10px; letter-spacing:.1em; text-transform:uppercase;
+  color:#8b97a4; border:1px solid #39424d; border-radius:4px; padding:2px 8px;
+}
+.spec-trigger{ font-size:12px; line-height:1.6; color:#8b97a4; margin:0 0 var(--space-4); }
+.spec-trigger b{ color:#cdd6df; font-weight:700; }
+.stage{ border-radius:12px; overflow:hidden; border:1px solid #39424d; }
+
+/* =====================================================================
+   THE SYSTEM — every rule below reads ONLY through tokens.css variables,
+   so swapping the THEME block re-skins the whole gallery.
+   ===================================================================== */
+
+/* Surfaces --------------------------------------------------------- */
+.fm-band{ background:var(--band-bg); color:var(--band-text); padding:var(--space-12) var(--gutter); }
+.fm-page{ background:var(--page-bg); color:var(--page-text); padding:var(--space-12) var(--gutter);
+  font-family:var(--font-display); font-size:var(--fs-body); line-height:var(--lh-body); }
+
+/* 01 — Top Banner -------------------------------------------------- */
+.fm-banner{
+  background:var(--accent-command); color:var(--accent-command-ink);
+  min-height:var(--banner-h); display:flex; align-items:center; justify-content:space-between;
+  padding:0 var(--gutter);
+  font-family:var(--font-mono); font-weight:700; font-size:var(--fs-meta);
+  letter-spacing:var(--ls-meta); text-transform:uppercase;
+}
+
+/* 02 — Hero -------------------------------------------------------- */
+.fm-eyebrow{
+  font-family:var(--font-mono); font-size:var(--fs-eyebrow); letter-spacing:var(--ls-eyebrow);
+  text-transform:uppercase; color:var(--accent-command); margin:0 0 var(--space-8);
+}
+.fm-wordmark{
+  font-family:var(--font-display); font-weight:900; font-size:var(--fs-wordmark);
+  letter-spacing:var(--ls-tight); line-height:.98; margin:0; color:var(--band-text);
+}
+.fm-wordmark .hl{ color:var(--accent-command); }
+.fm-lead{
+  font-family:var(--font-display); font-weight:400; font-size:var(--fs-lead);
+  line-height:1.5; color:var(--band-dim); max-width:52ch; margin:var(--space-10) 0 0;
+}
+.fm-meta{
+  display:flex; justify-content:space-between; gap:var(--space-4);
+  margin-top:var(--space-16);
+  font-family:var(--font-mono); font-size:var(--fs-meta); letter-spacing:var(--ls-meta);
+  text-transform:uppercase; color:var(--band-mute);
+}
+
+/* 03 — Section-Index Cards ---------------------------------------- */
+.fm-index{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-4); }
+.fm-index-card{
+  border:var(--border-w) solid var(--band-line); border-radius:var(--radius-card);
+  padding:var(--space-5);
+}
+.fm-index-num{
+  font-family:var(--font-mono); font-size:var(--fs-index); letter-spacing:var(--ls-label);
+  text-transform:uppercase; color:var(--accent-command); margin:0 0 var(--space-3);
+}
+.fm-index-title{ font-family:var(--font-display); font-weight:600; font-size:1.2rem; color:var(--band-text); }
+
+/* 04 — Section Header Band ---------------------------------------- */
+.fm-sechead-title{
+  font-family:var(--font-display); font-weight:800; font-size:var(--fs-h2);
+  letter-spacing:var(--ls-tight); line-height:1.05; color:var(--band-text);
+  margin:var(--space-2) 0 var(--space-4);
+}
+.fm-target{ font-family:var(--font-display); font-size:var(--fs-lead); color:var(--band-dim); margin:0; }
+.fm-target b{ color:var(--band-text); font-weight:600; }
+
+/* 05 — Label Pill -------------------------------------------------- */
+.fm-pill{
+  display:inline-block; background:var(--accent-command); color:var(--accent-command-ink);
+  font-family:var(--font-mono); font-weight:700; font-size:var(--fs-label);
+  letter-spacing:var(--ls-label); text-transform:uppercase;
+  padding:8px 14px; border-radius:var(--radius-pill);
+}
+
+/* 06/07 — Marker Lists (chevron + numbered) ----------------------- */
+.fm-list{ list-style:none; margin:var(--space-6) 0 0; padding:0; display:grid; gap:var(--space-5); }
+.fm-item{ display:flex; align-items:flex-start; gap:var(--space-4); }
+.fm-marker{
+  flex:0 0 var(--marker-size); width:var(--marker-size); height:var(--marker-size);
+  display:flex; align-items:center; justify-content:center;
+  border:var(--border-w) solid var(--page-line); border-radius:var(--radius-marker);
+  background:var(--page-card);
+  font-family:var(--font-mono); font-weight:700; font-size:15px; color:var(--page-dim);
+}
+.fm-item-body{ padding-top:4px; }
+.fm-item-body strong{ font-weight:700; color:var(--page-text); }
+
+/* 08 — Safety Callout --------------------------------------------- */
+.fm-callout{
+  background:var(--accent-command-tint);
+  border:var(--border-w-accent) solid var(--accent-command);
+  border-radius:var(--radius-card); padding:var(--space-6) var(--space-6);
+  margin-top:var(--space-8);
+}
+.fm-callout-label{
+  font-family:var(--font-mono); font-weight:700; font-size:var(--fs-label);
+  letter-spacing:var(--ls-label); text-transform:uppercase; color:var(--accent-command-deep);
+  margin:0 0 var(--space-3);
+}
+.fm-callout-body{ font-family:var(--font-display); color:var(--page-text); margin:0; line-height:1.5; }
+/* .note variant — same box, neutral (non-warning) framing */
+.fm-callout.note{ background:var(--page-card); border-color:var(--page-line); }
+.fm-callout.note .fm-callout-label{ color:var(--page-dim); }
+
+/* 09 — Spec Line --------------------------------------------------- */
+.fm-specline{ font-family:var(--font-display); font-size:var(--fs-body); margin:0; }
+.fm-specline .k{ font-family:var(--font-mono); text-transform:uppercase; letter-spacing:var(--ls-label);
+  font-size:var(--fs-label); color:var(--accent-command-deep); margin-right:8px; }
+.fm-page .fm-specline{ color:var(--page-text); }
+
+/* 10 — Data Table -------------------------------------------------- */
+.fm-table-wrap{ overflow-x:auto; margin-top:var(--space-6); }
+.fm-table{ width:100%; border-collapse:collapse; font-family:var(--font-display); font-size:var(--fs-body); }
+.fm-table th{
+  text-align:left; vertical-align:bottom;
+  font-family:var(--font-mono); font-weight:700; font-size:var(--fs-label);
+  letter-spacing:var(--ls-label); text-transform:uppercase; color:var(--accent-command-deep);
+  padding:0 var(--space-5) var(--space-3) 0;
+  border-bottom:var(--border-w-accent) solid var(--accent-command);
+}
+.fm-table td{
+  padding:var(--space-3) var(--space-5) var(--space-3) 0; color:var(--page-text);
+  border-bottom:var(--border-w) solid var(--page-line);
+}
+.fm-table th:last-child, .fm-table td:last-child{ padding-right:0; }
+.fm-table tr:last-child td{ border-bottom:none; }
+.fm-table td strong{ font-weight:700; }
+/* numeric columns → mono, right-aligned, tabular */
+.fm-table th.num, .fm-table td.num{
+  text-align:right; font-family:var(--font-mono); font-variant-numeric:tabular-nums;
+}
+
+/* 11 — Footer Meta Line ------------------------------------------- */
+.fm-footer{
+  display:flex; justify-content:space-between; gap:var(--space-4);
+  font-family:var(--font-mono); font-size:var(--fs-meta); letter-spacing:var(--ls-meta);
+  text-transform:uppercase; color:var(--band-mute);
+  padding:var(--space-6) var(--gutter); background:var(--band-bg);
+}
+
+/* Responsive ------------------------------------------------------- */
+@media (max-width:640px){
+  .fm-index{ grid-template-columns:1fr; }
+  .fm-meta, .fm-footer{ flex-direction:column; gap:6px; }
+}
+@media (prefers-reduced-motion: reduce){
+  *{ transition:none !important; }
+}
+</style>
+</head>
+<body>
+<div class="gallery">
+
+  <header class="g-head">
+    <h1>Field Manual — Component Gallery</h1>
+    <p>The <span class="tag">"Recon"</span> design system, extracted from
+    <code>Sample_C_Field_Manual.pdf</code>. Every component below reads only through
+    <code>tokens.css</code> variables and is shown on its correct surface
+    (<span class="tag">BAND</span> = dark navy, <span class="tag">PAGE</span> = light).
+    Swap the THEME block in <code>tokens.css</code> to re-skin all of it.</p>
+  </header>
+
+  <!-- 01 -->
+  <section class="spec">
+    <div class="spec-head"><span class="spec-index">01</span><span class="spec-name">Top Banner</span><span class="spec-surface">accent</span></div>
+    <p class="spec-trigger"><b>Triggered by:</b> the document type + revision/region meta at the very top of the source.</p>
+    <div class="stage">
+      <div class="fm-banner"><span>FIELD MANUAL</span><span>REV. 01 / EYE REGION</span></div>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section class="spec">
+    <div class="spec-head"><span class="spec-index">02</span><span class="spec-name">Hero</span><span class="spec-surface">band</span></div>
+    <p class="spec-trigger"><b>Triggered by:</b> the doc title (one key word to stress) + a one-line premise. Split-color wordmark puts the key term in the command accent.</p>
+    <div class="stage">
+      <div class="fm-band">
+        <p class="fm-eyebrow">// Practical Protocol for Men</p>
+        <h1 class="fm-wordmark">Eye<span class="hl">maxxing</span></h1>
+        <p class="fm-lead">A do-this-now playbook for the eye region. Build contrast, add structure, dial up masculinity — one actionable step at a time.</p>
+        <div class="fm-meta"><span>Hunter &gt; Prey</span><span>Implement Immediately</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section class="spec">
+    <div class="spec-head"><span class="spec-index">03</span><span class="spec-name">Section-Index Cards</span><span class="spec-surface">band</span></div>
+    <p class="spec-trigger"><b>Triggered by:</b> a list of the sections/parts up front — a table of contents.</p>
+    <div class="stage">
+      <div class="fm-band">
+        <div class="fm-index">
+          <div class="fm-index-card"><p class="fm-index-num">SEC 01</p><div class="fm-index-title">Eyebrows</div></div>
+          <div class="fm-index-card"><p class="fm-index-num">SEC 02</p><div class="fm-index-title">Eyelashes</div></div>
+          <div class="fm-index-card"><p class="fm-index-num">SEC 03</p><div class="fm-index-title">Eye colour</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section class="spec">
+    <div class="spec-head"><span class="spec-index">04</span><span class="spec-name">Section Header Band</span><span class="spec-surface">band</span></div>
+    <p class="spec-trigger"><b>Triggered by:</b> the start of any titled section (<code>## Heading</code>). Opens with numbered eyebrow, title, and a Target/Spec subline.</p>
+    <div class="stage">
+      <div class="fm-band">
+        <p class="fm-eyebrow">Section 01 — Eyebrows</p>
+        <h2 class="fm-sechead-title">Eyebrows</h2>
+        <p class="fm-target">Target: low-set, full, thick and long, with a <b>positive or neutral tilt</b>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section class="spec">
+    <div class="spec-head"><span class="spec-index">05</span><span class="spec-name">Label Pill</span><span class="spec-surface">page</span></div>
+    <p class="spec-trigger"><b>Triggered by:</b> a named <i>group</i> of steps under a sub-label. Heads the list that follows it.</p>
+    <div class="stage">
+      <div class="fm-page">
+        <span class="fm-pill">Grooming — Do First</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section class="spec">
+    <div class="spec-head"><span class="spec-index">06</span><span class="spec-name">Chevron-Marker List</span><span class="spec-surface">page</span></div>
+    <p class="spec-trigger"><b>Triggered by:</b> unordered "do this" directives. Each item gets a bordered-square <code>&rsaquo;</code> marker; key terms are bold.</p>
+    <div class="stage">
+      <div class="fm-page">
+        <span class="fm-pill">Grooming — Do First</span>
+        <ul class="fm-list">
+          <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body">Groom properly before anything else — highest impact, lowest cost.</div></li>
+          <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body">Comb to line up <strong>Point A</strong>, the inner start of the brow.</div></li>
+          <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body">Set start, arch and tail consistently every time.</div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 -->
+  <section class="spec">
+    <div class="spec-head"><span class="spec-index">07</span><span class="spec-name">Numbered-Marker List</span><span class="spec-surface">page</span></div>
+    <p class="spec-trigger"><b>Triggered by:</b> ordered / sequenced protocol steps (1, 2, 3 — "first, then"). Bordered-square number + bold lead + detail.</p>
+    <div class="stage">
+      <div class="fm-page">
+        <span class="fm-pill">If Brows Are Sparse</span>
+        <ul class="fm-list">
+          <li class="fm-item"><span class="fm-marker">1</span><div class="fm-item-body"><strong>Build a base.</strong> Minoxidil 2%, more effective with tretinoin (0.025–0.05%).</div></li>
+          <li class="fm-item"><span class="fm-marker">2</span><div class="fm-item-body"><strong>Order:</strong> tretinoin first, then minoxidil. Night-time only.</div></li>
+          <li class="fm-item"><span class="fm-marker">3</span><div class="fm-item-body"><strong>Dermaroller</strong> twice per week max.</div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 -->
+  <section class="spec">
+    <div class="spec-head"><span class="spec-index">08</span><span class="spec-name">Safety Callout</span><span class="spec-surface">page</span></div>
+    <p class="spec-trigger"><b>Triggered by:</b> a warning, caution, "safety", or <code>&gt;</code> blockquote aside. The <code>.note</code> variant handles neutral (non-warning) asides.</p>
+    <div class="stage">
+      <div class="fm-page">
+        <div class="fm-callout">
+          <p class="fm-callout-label">⚠ Safety Check</p>
+          <p class="fm-callout-body">Potent off-label topicals. Patch-test, introduce one at a time, apply at night only, and stop if irritation develops.</p>
+        </div>
+        <div class="fm-callout note">
+          <p class="fm-callout-label">Note</p>
+          <p class="fm-callout-body">Same box, neutral framing — for context and asides that aren't warnings.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 -->
+  <section class="spec">
+    <div class="spec-head"><span class="spec-index">09</span><span class="spec-name">Spec Line</span><span class="spec-surface">band / page</span></div>
+    <p class="spec-trigger"><b>Triggered by:</b> a <code>Target:</code> / <code>Goal:</code> / <code>Spec:</code> one-liner. A labeled key → value statement.</p>
+    <div class="stage">
+      <div class="fm-page">
+        <p class="fm-specline"><span class="k">Target</span>low-set, full, thick and long, with a positive or neutral tilt.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 -->
+  <section class="spec">
+    <div class="spec-head"><span class="spec-index">10</span><span class="spec-name">Data Table</span><span class="spec-surface">page</span></div>
+    <p class="spec-trigger"><b>Triggered by:</b> rows of items each carrying quantities / specs, optionally with a header row. Numeric columns get <code>class="num"</code> — mono, right-aligned, tabular.</p>
+    <div class="stage">
+      <div class="fm-page">
+        <span class="fm-pill">Topical Protocol</span>
+        <div class="fm-table-wrap">
+          <table class="fm-table">
+            <thead>
+              <tr><th>Agent</th><th class="num">Strength</th><th class="num">Per Week</th><th>Window</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Minoxidil</strong></td><td class="num">2%</td><td class="num">7×</td><td>Night</td></tr>
+              <tr><td><strong>Tretinoin</strong></td><td class="num">0.05%</td><td class="num">7×</td><td>Night</td></tr>
+              <tr><td><strong>Dermaroller</strong></td><td class="num">0.5 mm</td><td class="num">2×</td><td>AM</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 -->
+  <section class="spec">
+    <div class="spec-head"><span class="spec-index">11</span><span class="spec-name">Footer Meta Line</span><span class="spec-surface">band</span></div>
+    <p class="spec-trigger"><b>Triggered by:</b> a short imperative tagline / attribution closing the page.</p>
+    <div class="stage">
+      <div class="fm-footer"><span>Field Manual · Rev. 01</span><span>Implement Immediately</span></div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

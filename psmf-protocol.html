@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PSMF Protocol — 14 Day Cut</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap');
+
+  :root{
+    --bg: #101411;
+    --bg-soft: #161b17;
+    --card: #1b211c;
+    --line: #2c352e;
+    --text: #e9ece7;
+    --text-dim: #93a193;
+    --text-mute: #5e6b60;
+    --burn: #ff6a45;
+    --burn-dim: #6b3527;
+    --fill: #6be3c4;
+    --fill-dim: #2c4f47;
+    --warn: #f0c75e;
+  }
+
+  *{ box-sizing: border-box; margin:0; padding:0; }
+  html{ scroll-behavior: smooth; }
+
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before{
+    content:"";
+    position: fixed;
+    inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap{ max-width: 860px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    padding: 72px 0 48px;
+    border-bottom: 1px solid var(--line);
+  }
+  .tag{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--burn);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .tag::before{
+    content:"";
+    width: 8px; height: 8px;
+    background: var(--burn);
+    border-radius: 50%;
+    display:inline-block;
+    box-shadow: 0 0 0 4px var(--burn-dim);
+  }
+  h1{
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.04;
+    margin-bottom: 22px;
+  }
+  h1 em{
+    font-style: normal;
+    color: var(--burn);
+  }
+  .hero-sub{
+    font-family: 'Source Serif 4', serif;
+    font-style: italic;
+    color: var(--text-dim);
+    font-size: 1.15rem;
+    max-width: 540px;
+    margin-bottom: 36px;
+  }
+
+  .statline{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .statline div{
+    padding: 16px 14px;
+    border-right: 1px solid var(--line);
+  }
+  .statline div:last-child{ border-right: none; }
+  .stat-num{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .stat-label{
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-mute);
+    margin-top: 4px;
+  }
+
+  /* ---------- SECTION GENERAL ---------- */
+  section{ padding: 56px 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type{ border-bottom: none; }
+
+  .eyebrow{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-mute);
+    margin-bottom: 12px;
+  }
+  h2{
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-bottom: 18px;
+  }
+  p.lead{
+    color: var(--text-dim);
+    max-width: 620px;
+    font-size: 1.02rem;
+  }
+
+  /* ---------- MACRO TARGET CARDS ---------- */
+  .macro-grid{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 28px;
+  }
+  .macro-card{
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 16px;
+  }
+  .macro-card .m-label{
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-mute);
+    margin-bottom: 10px;
+  }
+  .macro-card .m-val{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .macro-card.burn .m-val{ color: var(--burn); }
+  .macro-card .m-sub{
+    font-size: 12px;
+    color: var(--text-mute);
+    margin-top: 4px;
+  }
+
+  /* ---------- PROTEIN MATH ---------- */
+  .calc-box{
+    margin-top: 28px;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .calc-box .calc-item{
+    border-left: 2px solid var(--burn-dim);
+    padding-left: 16px;
+  }
+  .calc-box .calc-item.pref{ border-left-color: var(--burn); }
+  .calc-item .ctitle{
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-mute);
+    margin-bottom: 6px;
+  }
+  .calc-item .cval{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+  .calc-item .cformula{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-mute);
+    margin-top: 4px;
+  }
+
+  /* ---------- TABLES ---------- */
+  table{
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 24px;
+    font-size: 0.95rem;
+  }
+  th{
+    text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-mute);
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  td{
+    padding: 12px 12px;
+    border-bottom: 1px solid var(--line);
+    color: var(--text-dim);
+  }
+  tr:last-child td{ border-bottom: none; }
+  td.num, th.num{ font-family: 'IBM Plex Mono', monospace; text-align: right; color: var(--text); }
+  tr.totals td{
+    font-weight: 600;
+    color: var(--text);
+    border-top: 1px solid var(--line);
+    background: var(--bg-soft);
+  }
+  tr.totals td.num{ color: var(--burn); font-family: 'IBM Plex Mono', monospace; }
+
+  .table-tag{
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+  .table-tag.burn{ background: var(--burn-dim); color: var(--burn); }
+  .table-tag.fill{ background: var(--fill-dim); color: var(--fill); }
+
+  /* ---------- TRAINING ---------- */
+  .training-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 28px;
+  }
+  .t-card{
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 22px;
+  }
+  .t-card h3{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 14px;
+  }
+  .t-card.keep h3{ color: var(--fill); }
+  .t-card.reduce h3{ color: var(--burn); }
+  .t-card ul{ list-style: none; }
+  .t-card li{
+    padding: 7px 0;
+    border-bottom: 1px solid var(--line);
+    color: var(--text-dim);
+    font-size: 0.94rem;
+  }
+  .t-card li:last-child{ border-bottom: none; }
+  .arrow-note{
+    margin-top: 18px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--text-mute);
+    padding: 14px 16px;
+    background: var(--bg-soft);
+    border-radius: 8px;
+    border: 1px solid var(--line);
+  }
+  .arrow-note .target{ color: var(--text); }
+
+  /* ---------- CYCLE VISUALIZER (signature) ---------- */
+  .cycle{
+    margin-top: 32px;
+  }
+  .cycle-row{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+  }
+  .day{
+    border-radius: 10px;
+    padding: 18px 10px;
+    text-align: center;
+    border: 1px solid var(--line);
+    position: relative;
+    transition: transform 0.15s ease;
+  }
+  .day:hover{ transform: translateY(-3px); }
+  .day .d-num{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-mute);
+    margin-bottom: 10px;
+  }
+  .day .d-type{
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .day.psmf{
+    background: linear-gradient(180deg, var(--bg-soft), var(--card));
+  }
+  .day.psmf .d-type{ color: var(--burn); }
+  .day.refeed{
+    background: linear-gradient(180deg, var(--fill-dim), var(--card));
+    border-color: var(--fill-dim);
+  }
+  .day.refeed .d-type{ color: var(--fill); }
+  .day.lift::after{
+    content:"LIFT";
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--warn);
+    border: 1px solid var(--warn);
+    border-radius: 4px;
+    padding: 1px 4px;
+  }
+  .cycle-legend{
+    display: flex;
+    gap: 24px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+  .cycle-legend span{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-mute);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .swatch{ width: 12px; height: 12px; border-radius: 3px; display:inline-block; }
+  .swatch.psmf{ background: var(--burn); }
+  .swatch.refeed{ background: var(--fill); }
+  .swatch.lift{ border: 1px solid var(--warn); }
+
+  /* ---------- TIMELINE / EXPECTATIONS ---------- */
+  .timeline{
+    margin-top: 28px;
+    border-left: 1px solid var(--line);
+    padding-left: 28px;
+  }
+  .tl-item{
+    position: relative;
+    padding-bottom: 32px;
+  }
+  .tl-item:last-child{ padding-bottom: 0; }
+  .tl-item::before{
+    content:"";
+    position: absolute;
+    left: -33px;
+    top: 4px;
+    width: 9px; height: 9px;
+    background: var(--bg);
+    border: 2px solid var(--burn);
+    border-radius: 50%;
+  }
+  .tl-week{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--burn);
+    margin-bottom: 8px;
+  }
+  .tl-item ul{ list-style: none; margin-top: 6px; }
+  .tl-item li{
+    color: var(--text-dim);
+    padding: 4px 0;
+    font-size: 0.95rem;
+  }
+  .tl-item li::before{ content: "— "; color: var(--text-mute); }
+
+  /* ---------- NOTE / CALLOUT ---------- */
+  .callout{
+    margin-top: 28px;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--warn);
+    border-radius: 8px;
+    padding: 20px 22px;
+    background: var(--bg-soft);
+  }
+  .callout .c-label{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--warn);
+    margin-bottom: 8px;
+  }
+  .callout p{ color: var(--text-dim); font-size: 0.95rem; }
+
+  /* ---------- FOOD PRIORITY LIST ---------- */
+  .chip-list{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .chip{
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    padding: 7px 14px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--text-dim);
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    padding: 48px 0 80px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-mute);
+    letter-spacing: 0.04em;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 720px){
+    .statline{ grid-template-columns: repeat(2, 1fr); }
+    .statline div:nth-child(2){ border-right: none; }
+    .macro-grid{ grid-template-columns: repeat(2, 1fr); }
+    .calc-box{ grid-template-columns: 1fr; }
+    .training-grid{ grid-template-columns: 1fr; }
+    .cycle-row{ grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .day{ padding: 10px 4px; }
+    .day .d-type{ font-size: 0.75rem; }
+    .day .d-num{ font-size: 9px; }
+    table{ font-size: 0.82rem; }
+    th, td{ padding: 8px 6px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="tag">Protocol Sheet · 14 Days</div>
+    <h1>The Cut From<br><em>11% to ~9%.</em></h1>
+    <p class="hero-sub">A protein-sparing modified fast, tuned down from the textbook version because you're already lean. High protein, low everything else, with scheduled refeeds so your training and your sanity survive it.</p>
+    <div class="statline">
+      <div><div class="stat-num">148 lb</div><div class="stat-label">Bodyweight</div></div>
+      <div><div class="stat-num">11%</div><div class="stat-label">Body Fat</div></div>
+      <div><div class="stat-num">132 lb</div><div class="stat-label">Lean Mass</div></div>
+      <div><div class="stat-num">10–14d</div><div class="stat-label">Run Length</div></div>
+    </div>
+  </header>
+
+  <!-- DAILY TARGETS -->
+  <section>
+    <div class="eyebrow">01 — Daily Targets (PSMF Days)</div>
+    <h2>Calories down. Protein way up.</h2>
+    <p class="lead">Everything else in the diet exists to protect the 132 lb of lean mass you already worked to build. Fat is kept just high enough to cover essential function and the four whole eggs you're not giving up.</p>
+
+    <div class="macro-grid">
+      <div class="macro-card burn">
+        <div class="m-label">Calories</div>
+        <div class="m-val">950–1,100</div>
+        <div class="m-sub">aggressive deficit</div>
+      </div>
+      <div class="macro-card">
+        <div class="m-label">Protein</div>
+        <div class="m-val">180–200g</div>
+        <div class="m-sub">~5.4–6.1 cal/lb LBM</div>
+      </div>
+      <div class="macro-card">
+        <div class="m-label">Fat</div>
+        <div class="m-val">20–30g</div>
+        <div class="m-sub">essential fats only</div>
+      </div>
+      <div class="macro-card">
+        <div class="m-label">Carbs</div>
+        <div class="m-val">&lt;30g</div>
+        <div class="m-sub">excluding dairy trace</div>
+      </div>
+    </div>
+
+    <div class="calc-box">
+      <div class="calc-item">
+        <div class="ctitle">Minimum Protein</div>
+        <div class="cval">~172g</div>
+        <div class="cformula">1.3 g × 132 lb LBM</div>
+      </div>
+      <div class="calc-item pref">
+        <div class="ctitle">Preferred Protein</div>
+        <div class="cval">185–198g</div>
+        <div class="cformula">1.4–1.5 g × 132 lb LBM</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXAMPLE DAY -->
+  <section>
+    <div class="eyebrow">02 — Example Day</div>
+    <h2>~1,100 calories <span class="table-tag burn">PSMF</span></h2>
+    <p class="lead">Four whole eggs stay in — a deliberate deviation from a standard PSMF for the choline, micronutrients, and a small amount of dietary fat.</p>
+
+    <table>
+      <thead>
+        <tr><th>Food</th><th>Amount</th><th class="num">Protein</th><th class="num">Calories</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Whole Eggs</td><td>4</td><td class="num">24g</td><td class="num">280</td></tr>
+        <tr><td>Egg Whites</td><td>16 large</td><td class="num">58g</td><td class="num">272</td></tr>
+        <tr><td>Chicken Breast</td><td>8 oz cooked</td><td class="num">70g</td><td class="num">375</td></tr>
+        <tr><td>Bone Broth</td><td>4 cups</td><td class="num">40g</td><td class="num">180</td></tr>
+        <tr class="totals"><td colspan="2">Total — ~21g fat, ~5g carbs</td><td class="num">192g</td><td class="num">~1,100</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- TRAINING -->
+  <section>
+    <div class="eyebrow">03 — Training Adjustments</div>
+    <h2>Same intensity. Less volume.</h2>
+    <p class="lead">At 2x/week, the goal during a PSMF isn't progress — it's signal preservation. Heavy, brief, and done.</p>
+
+    <div class="training-grid">
+      <div class="t-card keep">
+        <h3>Keep</h3>
+        <ul>
+          <li>Heavy compound lifts</li>
+          <li>Working intensity / load</li>
+          <li>Session frequency (2x/week)</li>
+        </ul>
+      </div>
+      <div class="t-card reduce">
+        <h3>Reduce</h3>
+        <ul>
+          <li>Total volume by 30–50%</li>
+          <li>Accessory / junk sets</li>
+          <li>Training to failure</li>
+        </ul>
+      </div>
+    </div>
+    <div class="arrow-note">4–5 working sets <span style="color:var(--text-mute)">→</span> <span class="target">2–3 hard working sets</span> — maintain strength, don't chase growth.</div>
+  </section>
+
+  <!-- 7-DAY CYCLE -->
+  <section>
+    <div class="eyebrow">04 — The Weekly Cycle</div>
+    <h2>6–7 days PSMF, 1 refeed.</h2>
+    <p class="lead">Schedule the refeed the day before a lifting session — it tops off glycogen right when you need it for performance.</p>
+
+    <div class="cycle">
+      <div class="cycle-row">
+        <div class="day psmf"><div class="d-num">DAY 1</div><div class="d-type">PSMF</div></div>
+        <div class="day psmf"><div class="d-num">DAY 2</div><div class="d-type">PSMF</div></div>
+        <div class="day refeed"><div class="d-num">DAY 3</div><div class="d-type">Refeed</div></div>
+        <div class="day psmf lift"><div class="d-num">DAY 4</div><div class="d-type">PSMF</div></div>
+        <div class="day psmf"><div class="d-num">DAY 5</div><div class="d-type">PSMF</div></div>
+        <div class="day psmf"><div class="d-num">DAY 6</div><div class="d-type">PSMF</div></div>
+        <div class="day psmf"><div class="d-num">DAY 7</div><div class="d-type">PSMF</div></div>
+      </div>
+      <div class="cycle-legend">
+        <span><span class="swatch psmf"></span> PSMF — 950–1,100 cal</span>
+        <span><span class="swatch refeed"></span> Refeed — 2,000–2,500 cal</span>
+        <span><span class="swatch lift"></span> Lift day (place after refeed)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- REFEED -->
+  <section>
+    <div class="eyebrow">05 — Refeed Day</div>
+    <h2>2,000–2,500 cal <span class="table-tag fill">Refeed</span></h2>
+    <p class="lead">Not a cheat day — a tactical glycogen reload. Fat stays low so the calories go toward carbs and protein, where they're useful.</p>
+
+    <div class="macro-grid">
+      <div class="macro-card">
+        <div class="m-label">Protein</div>
+        <div class="m-val">160–180g</div>
+      </div>
+      <div class="macro-card">
+        <div class="m-label">Carbs</div>
+        <div class="m-val">250–350g</div>
+      </div>
+      <div class="macro-card">
+        <div class="m-label">Fat</div>
+        <div class="m-val">&lt;40g</div>
+      </div>
+      <div class="macro-card">
+        <div class="m-label">Calories</div>
+        <div class="m-val">2,000–2,500</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:1rem; margin-top:32px; margin-bottom:6px; font-weight:600;">Sample refeed (no rice / rice cakes)</h3>
+    <table>
+      <thead>
+        <tr><th>Food</th><th class="num">Amount</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Fage 0%</td><td class="num">2 cups</td></tr>
+        <tr><td>Oatmeal (dry)</td><td class="num">150g</td></tr>
+        <tr><td>Bananas</td><td class="num">3 large</td></tr>
+        <tr><td>Chicken Breast</td><td class="num">8 oz cooked</td></tr>
+        <tr><td>Sweet Potatoes (baked)</td><td class="num">900g</td></tr>
+        <tr><td>Egg Whites</td><td class="num">12</td></tr>
+        <tr class="totals"><td>~175g protein · ~300g carbs · ~15g fat</td><td class="num">~2,100–2,300</td></tr>
+      </tbody>
+    </table>
+
+    <div class="chip-list">
+      <span class="chip">Sweet potatoes</span>
+      <span class="chip">Oatmeal</span>
+      <span class="chip">Bananas</span>
+      <span class="chip">Berries</span>
+      <span class="chip">White rice</span>
+      <span class="chip">Potatoes</span>
+      <span class="chip">Rice cakes</span>
+      <span class="chip">Low-fat cereal</span>
+      <span class="chip">Bagels</span>
+    </div>
+  </section>
+
+  <!-- EXPECTATIONS TIMELINE -->
+  <section>
+    <div class="eyebrow">06 — What To Expect</div>
+    <h2>14-day outlook</h2>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-week">Week 1</div>
+        <ul>
+          <li>Scale down 3–6 lb</li>
+          <li>Mostly glycogen and water</li>
+          <li>Some genuine fat loss begins</li>
+        </ul>
+      </div>
+      <div class="tl-item">
+        <div class="tl-week">Week 2</div>
+        <ul>
+          <li>Fat loss becomes the main driver</li>
+          <li>Strength may dip slightly</li>
+        </ul>
+      </div>
+      <div class="tl-item">
+        <div class="tl-week">After Refeed</div>
+        <ul>
+          <li>Weight +2–5 lb (glycogen/water)</li>
+          <li>Fuller muscles, better pumps</li>
+          <li>Improved strength and energy</li>
+        </ul>
+      </div>
+      <div class="tl-item">
+        <div class="tl-week">Outcome (10–14 days)</div>
+        <ul>
+          <li>2–4 lb actual fat lost</li>
+          <li>Noticeably leaner appearance</li>
+          <li>~9–10% body fat, depending on water</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="c-label">Reassess</div>
+      <p>Repeat the 6–7 day PSMF / 1 refeed cycle for 2–4 weeks total, then reassess body composition, training performance, and whether to continue, hold at maintenance, or transition to a slower deficit.</p>
+    </div>
+  </section>
+
+  <footer>
+    PSMF Protocol Sheet — generated for reference. Reassess after each cycle.
+  </footer>
+
+</div>
+
+</body>
+</html>

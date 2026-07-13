@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Component Gallery — Protocol Sheet Design System</title>
+
+<!-- The token system. Components read ONLY through these variables. -->
+<link rel="stylesheet" href="tokens.css">
+
+<style>
+  /* Locked brand fonts (font-family names are defined in tokens.css) */
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap');
+
+  *{ box-sizing: border-box; margin:0; padding:0; }
+  html{ scroll-behavior: smooth; }
+
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-display);
+    line-height: var(--lh-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Fixed dot-grid background (signature) */
+  body::before{
+    content:"";
+    position: fixed; inset:0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap{ max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); position: relative; z-index: 1; }
+
+  /* ============================================================
+     GALLERY CHROME (not part of the design system itself)
+     ============================================================ */
+  .gallery-head{ padding: 64px 0 40px; border-bottom: 1px solid var(--line); }
+  .gallery-head .kicker{
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--ls-eyebrow);
+    text-transform: uppercase; color: var(--accent-effort); margin-bottom: 16px;
+  }
+  .gallery-head h1{ font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700; letter-spacing: var(--ls-tight); margin-bottom: 16px; }
+  .gallery-head p{ font-family: var(--font-editorial); font-style: italic; color: var(--text-dim); max-width: 560px; }
+
+  .spec{ padding: 48px 0; border-bottom: 1px solid var(--line); }
+  .spec-head{ display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 24px; }
+  .spec-index{ font-family: var(--font-mono); font-size: 12px; color: var(--text-mute); }
+  .spec-name{ font-family: var(--font-mono); font-size: 13px; text-transform: uppercase; letter-spacing: var(--ls-label); color: var(--text); }
+  .spec-trigger{ font-family: var(--font-mono); font-size: 11px; color: var(--accent-recover); margin-left: auto; }
+
+  /* ============================================================
+     DESIGN SYSTEM COMPONENTS
+     ============================================================ */
+
+  /* 01 — HERO ------------------------------------------------- */
+  .tag{
+    font-family: var(--font-mono); font-size: var(--fs-eyebrow); letter-spacing: var(--ls-eyebrow);
+    text-transform: uppercase; color: var(--accent-effort); margin-bottom: 18px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .tag::before{
+    content:""; width: 8px; height: 8px; background: var(--accent-effort);
+    border-radius: 50%; display:inline-block; box-shadow: 0 0 0 4px var(--accent-effort-dim);
+  }
+  .hero h1{ font-size: var(--fs-h1); font-weight: 700; letter-spacing: var(--ls-tight); line-height: 1.04; margin-bottom: 22px; }
+  .hero h1 em{ font-style: normal; color: var(--accent-effort); }
+  .hero-sub{
+    font-family: var(--font-editorial); font-style: italic; color: var(--text-dim);
+    font-size: 1.15rem; max-width: 540px; margin-bottom: 36px;
+  }
+
+  /* 02 — STATLINE --------------------------------------------- */
+  .statline{ display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .statline .stat{ padding: 16px 14px; border-right: 1px solid var(--line); }
+  .statline .stat:last-child{ border-right: none; }
+  .stat-num{ font-family: var(--font-mono); font-size: var(--fs-data); font-weight: 600; color: var(--text); }
+  .stat-label{ font-size: var(--fs-label); text-transform: uppercase; letter-spacing: var(--ls-label); color: var(--text-mute); margin-top: 4px; }
+
+  /* 03 — SECTION HEADER --------------------------------------- */
+  .eyebrow{ font-family: var(--font-mono); font-size: var(--fs-eyebrow); letter-spacing: var(--ls-eyebrow); text-transform: uppercase; color: var(--text-mute); margin-bottom: 12px; }
+  h2{ font-size: var(--fs-h2); font-weight: 600; letter-spacing: -0.01em; margin-bottom: 18px; }
+  p.lead{ color: var(--text-dim); max-width: 620px; font-size: var(--fs-lead); }
+
+  /* 04 — MACRO CARDS ------------------------------------------ */
+  .macro-grid{ display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 28px; }
+  .macro-card{ background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 16px; }
+  .macro-card .m-label{ font-size: var(--fs-label); text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-mute); margin-bottom: 10px; }
+  .macro-card .m-val{ font-family: var(--font-mono); font-size: 1.6rem; font-weight: 600; color: var(--text); }
+  .macro-card.accent .m-val{ color: var(--accent-effort); }
+  .macro-card .m-sub{ font-size: 12px; color: var(--text-mute); margin-top: 4px; }
+
+  /* 05 — CALC BOX --------------------------------------------- */
+  .calc-box{ margin-top: 28px; background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .calc-item{ border-left: 2px solid var(--accent-effort-dim); padding-left: 16px; }
+  .calc-item.primary{ border-left-color: var(--accent-effort); }
+  .ctitle{ font-size: 12px; text-transform: uppercase; letter-spacing: var(--ls-label); color: var(--text-mute); margin-bottom: 6px; }
+  .cval{ font-family: var(--font-mono); font-size: 1.4rem; font-weight: 600; }
+  .cformula{ font-family: var(--font-mono); font-size: 12px; color: var(--text-mute); margin-top: 4px; }
+
+  /* 06 — DATA TABLE ------------------------------------------- */
+  table{ width: 100%; border-collapse: collapse; margin-top: 24px; font-size: 0.95rem; }
+  th{ text-align: left; font-family: var(--font-mono); font-size: var(--fs-label); text-transform: uppercase; letter-spacing: var(--ls-label); color: var(--text-mute); padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  td{ padding: 12px; border-bottom: 1px solid var(--line); color: var(--text-dim); }
+  tr:last-child td{ border-bottom: none; }
+  td.num, th.num{ font-family: var(--font-mono); text-align: right; color: var(--text); }
+  tr.totals td{ font-weight: 600; color: var(--text); border-top: 1px solid var(--line); background: var(--bg-soft); }
+  tr.totals td.num{ color: var(--accent-effort); font-family: var(--font-mono); }
+
+  /* 07 — TABLE TAGS (inline semantic pills) ------------------- */
+  .table-tag{ display: inline-block; font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: var(--ls-label); padding: 3px 8px; border-radius: 4px; margin-left: 10px; vertical-align: middle; }
+  .table-tag.effort{ background: var(--accent-effort-dim); color: var(--accent-effort); }
+  .table-tag.recover{ background: var(--accent-recover-dim); color: var(--accent-recover); }
+
+  /* 08 — TWO-CARD COMPARE ------------------------------------- */
+  .compare-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 28px; }
+  .c-card{ border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+  .c-card h3{ font-family: var(--font-mono); font-size: 13px; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 14px; }
+  .c-card.positive h3{ color: var(--accent-recover); }
+  .c-card.negative h3{ color: var(--accent-effort); }
+  .c-card ul{ list-style: none; }
+  .c-card li{ padding: 7px 0; border-bottom: 1px solid var(--line); color: var(--text-dim); font-size: 0.94rem; }
+  .c-card li:last-child{ border-bottom: none; }
+  .arrow-note{ margin-top: 18px; font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-mute); padding: 14px 16px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--line); }
+  .arrow-note .target{ color: var(--text); }
+
+  /* 09 — SCHEDULE STRIP (signature; generalized cycle viz) ---- */
+  .schedule{ margin-top: 32px; }
+  .schedule-row{ display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+  .cell{ border-radius: var(--radius); padding: 18px 10px; text-align: center; border: 1px solid var(--line); position: relative; transition: transform 0.15s ease; }
+  .cell:hover{ transform: translateY(-3px); }
+  .cell-num{ font-family: var(--font-mono); font-size: 11px; color: var(--text-mute); margin-bottom: 10px; }
+  .cell-type{ font-weight: 600; font-size: 0.95rem; }
+  .cell.type-a{ background: linear-gradient(180deg, var(--bg-soft), var(--card)); }
+  .cell.type-a .cell-type{ color: var(--accent-effort); }
+  .cell.type-b{ background: linear-gradient(180deg, var(--accent-recover-dim), var(--card)); border-color: var(--accent-recover-dim); }
+  .cell.type-b .cell-type{ color: var(--accent-recover); }
+  .cell.badge::after{ content: attr(data-badge); position: absolute; top: 6px; right: 6px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; color: var(--accent-warn); border: 1px solid var(--accent-warn); border-radius: 4px; padding: 1px 4px; }
+  .schedule-legend{ display: flex; gap: 24px; margin-top: 18px; flex-wrap: wrap; }
+  .schedule-legend span{ font-family: var(--font-mono); font-size: 12px; color: var(--text-mute); display: flex; align-items: center; gap: 8px; }
+  .swatch{ width: 12px; height: 12px; border-radius: 3px; display:inline-block; }
+  .swatch.a{ background: var(--accent-effort); }
+  .swatch.b{ background: var(--accent-recover); }
+  .swatch.badge{ border: 1px solid var(--accent-warn); }
+
+  /* 10 — TIMELINE --------------------------------------------- */
+  .timeline{ margin-top: 28px; border-left: 1px solid var(--line); padding-left: 28px; }
+  .tl-item{ position: relative; padding-bottom: 32px; }
+  .tl-item:last-child{ padding-bottom: 0; }
+  .tl-item::before{ content:""; position: absolute; left: -33px; top: 4px; width: 9px; height: 9px; background: var(--bg); border: 2px solid var(--accent-effort); border-radius: 50%; }
+  .tl-stage{ font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: var(--ls-label); color: var(--accent-effort); margin-bottom: 8px; }
+  .tl-item ul{ list-style: none; margin-top: 6px; }
+  .tl-item li{ color: var(--text-dim); padding: 4px 0; font-size: 0.95rem; }
+  .tl-item li::before{ content: "— "; color: var(--text-mute); }
+
+  /* 11 — CALLOUT ---------------------------------------------- */
+  .callout{ margin-top: 28px; border: 1px solid var(--line); border-left: 3px solid var(--accent-warn); border-radius: var(--radius-sm); padding: 20px 22px; background: var(--bg-soft); }
+  .callout .c-label{ font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent-warn); margin-bottom: 8px; }
+  .callout p{ color: var(--text-dim); font-size: 0.95rem; }
+
+  /* 12 — CHIP LIST -------------------------------------------- */
+  .chip-list{ display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+  .chip{ font-family: var(--font-mono); font-size: 13px; padding: 7px 14px; border: 1px solid var(--line); border-radius: var(--radius-pill); color: var(--text-dim); }
+
+  /* 13 — FOOTER ----------------------------------------------- */
+  footer{ padding: 48px 0 80px; font-family: var(--font-mono); font-size: 12px; color: var(--text-mute); letter-spacing: 0.04em; }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 720px){
+    .statline{ grid-template-columns: repeat(2, 1fr); }
+    .statline .stat:nth-child(2){ border-right: none; }
+    .macro-grid{ grid-template-columns: repeat(2, 1fr); }
+    .calc-box{ grid-template-columns: 1fr; }
+    .compare-grid{ grid-template-columns: 1fr; }
+    .schedule-row{ grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .cell{ padding: 10px 4px; }
+    .cell-type{ font-size: 0.75rem; }
+    .cell-num{ font-size: 9px; }
+    table{ font-size: 0.82rem; }
+    th, td{ padding: 8px 6px; }
+    .spec-trigger{ margin-left: 0; }
+  }
+  @media (prefers-reduced-motion: reduce){ *{ transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="gallery-head">
+    <div class="kicker">Living Component Gallery</div>
+    <h1>Protocol Sheet — Design System</h1>
+    <p>Every reusable block, rendered through the token system. Each is labeled with the content signal that triggers it — the same signals the text-to-product workflow will read.</p>
+  </div>
+
+  <!-- 01 HERO -->
+  <div class="spec">
+    <div class="spec-head"><span class="spec-index">01</span><span class="spec-name">Hero</span><span class="spec-trigger">Triggered by: title + premise + headline metrics</span></div>
+    <div class="hero">
+      <div class="tag">Protocol Sheet · 14 Days</div>
+      <h1>The Cut From <em>11% to ~9%.</em></h1>
+      <p class="hero-sub">A protein-sparing modified fast, tuned down from the textbook version because you're already lean — with scheduled refeeds so training and sanity survive it.</p>
+    </div>
+  </div>
+
+  <!-- 02 STATLINE -->
+  <div class="spec">
+    <div class="spec-head"><span class="spec-index">02</span><span class="spec-name">Statline</span><span class="spec-trigger">Triggered by: 3–4 headline metrics about the subject</span></div>
+    <div class="statline">
+      <div class="stat"><div class="stat-num">148 lb</div><div class="stat-label">Bodyweight</div></div>
+      <div class="stat"><div class="stat-num">11%</div><div class="stat-label">Body Fat</div></div>
+      <div class="stat"><div class="stat-num">132 lb</div><div class="stat-label">Lean Mass</div></div>
+      <div class="stat"><div class="stat-num">10–14d</div><div class="stat-label">Run Length</div></div>
+    </div>
+  </div>
+
+  <!-- 03 SECTION HEADER -->
+  <div class="spec">
+    <div class="spec-head"><span class="spec-index">03</span><span class="spec-name">Section Header</span><span class="spec-trigger">Triggered by: the start of every content section</span></div>
+    <div class="eyebrow">01 — Daily Targets (PSMF Days)</div>
+    <h2>Calories down. Protein way up.</h2>
+    <p class="lead">Everything else in the diet exists to protect the lean mass you already built. This eyebrow + H2 + lead rhythm repeats at the top of every section.</p>
+  </div>
+
+  <!-- 04 MACRO CARDS -->
+  <div class="spec">
+    <div class="spec-head"><span class="spec-index">04</span><span class="spec-name">Macro Cards</span><span class="spec-trigger">Triggered by: 3–5 parallel target values</span></div>
+    <div class="macro-grid">
+      <div class="macro-card accent"><div class="m-label">Calories</div><div class="m-val">950–1,100</div><div class="m-sub">aggressive deficit</div></div>
+      <div class="macro-card"><div class="m-label">Protein</div><div class="m-val">180–200g</div><div class="m-sub">~5.4–6.1 cal/lb LBM</div></div>
+      <div class="macro-card"><div class="m-label">Fat</div><div class="m-val">20–30g</div><div class="m-sub">essential fats only</div></div>
+      <div class="macro-card"><div class="m-label">Carbs</div><div class="m-val">&lt;30g</div><div class="m-sub">excluding dairy trace</div></div>
+    </div>
+  </div>
+
+  <!-- 05 CALC BOX -->
+  <div class="spec">
+    <div class="spec-head"><span class="spec-index">05</span><span class="spec-name">Calc Box</span><span class="spec-trigger">Triggered by: a value plus its derivation / formula</span></div>
+    <div class="calc-box">
+      <div class="calc-item"><div class="ctitle">Minimum Protein</div><div class="cval">~172g</div><div class="cformula">1.3 g × 132 lb LBM</div></div>
+      <div class="calc-item primary"><div class="ctitle">Preferred Protein</div><div class="cval">185–198g</div><div class="cformula">1.4–1.5 g × 132 lb LBM</div></div>
+    </div>
+  </div>
+
+  <!-- 06 DATA TABLE + 07 TABLE TAG -->
+  <div class="spec">
+    <div class="spec-head"><span class="spec-index">06</span><span class="spec-name">Data Table + Table Tag</span><span class="spec-trigger">Triggered by: rows of items with quantities (+ totals if summable)</span></div>
+    <h2 style="font-size:1.1rem;">Example day <span class="table-tag effort">PSMF</span></h2>
+    <table>
+      <thead><tr><th>Food</th><th>Amount</th><th class="num">Protein</th><th class="num">Calories</th></tr></thead>
+      <tbody>
+        <tr><td>Whole Eggs</td><td>4</td><td class="num">24g</td><td class="num">280</td></tr>
+        <tr><td>Egg Whites</td><td>16 large</td><td class="num">58g</td><td class="num">272</td></tr>
+        <tr><td>Chicken Breast</td><td>8 oz cooked</td><td class="num">70g</td><td class="num">375</td></tr>
+        <tr><td>Bone Broth</td><td>4 cups</td><td class="num">40g</td><td class="num">180</td></tr>
+        <tr class="totals"><td colspan="2">Total — ~21g fat, ~5g carbs</td><td class="num">192g</td><td class="num">~1,100</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 08 TWO-CARD COMPARE -->
+  <div class="spec">
+    <div class="spec-head"><span class="spec-index">08</span><span class="spec-name">Two-Card Compare</span><span class="spec-trigger">Triggered by: a keep/reduce or do/don't pairing</span></div>
+    <div class="compare-grid">
+      <div class="c-card positive"><h3>Keep</h3><ul><li>Heavy compound lifts</li><li>Working intensity / load</li><li>Session frequency (2×/week)</li></ul></div>
+      <div class="c-card negative"><h3>Reduce</h3><ul><li>Total volume by 30–50%</li><li>Accessory / junk sets</li><li>Training to failure</li></ul></div>
+    </div>
+    <div class="arrow-note">4–5 working sets <span style="color:var(--text-mute)">→</span> <span class="target">2–3 hard working sets</span> — maintain strength, don't chase growth.</div>
+  </div>
+
+  <!-- 09 SCHEDULE STRIP -->
+  <div class="spec">
+    <div class="spec-head"><span class="spec-index">09</span><span class="spec-name">Schedule Strip</span><span class="spec-trigger">Triggered by: a repeating N-day / N-step schedule</span></div>
+    <div class="schedule">
+      <div class="schedule-row">
+        <div class="cell type-a"><div class="cell-num">DAY 1</div><div class="cell-type">PSMF</div></div>
+        <div class="cell type-a"><div class="cell-num">DAY 2</div><div class="cell-type">PSMF</div></div>
+        <div class="cell type-b"><div class="cell-num">DAY 3</div><div class="cell-type">Refeed</div></div>
+        <div class="cell type-a badge" data-badge="LIFT"><div class="cell-num">DAY 4</div><div class="cell-type">PSMF</div></div>
+        <div class="cell type-a"><div class="cell-num">DAY 5</div><div class="cell-type">PSMF</div></div>
+        <div class="cell type-a"><div class="cell-num">DAY 6</div><div class="cell-type">PSMF</div></div>
+        <div class="cell type-a"><div class="cell-num">DAY 7</div><div class="cell-type">PSMF</div></div>
+      </div>
+      <div class="schedule-legend">
+        <span><span class="swatch a"></span> PSMF — 950–1,100 cal</span>
+        <span><span class="swatch b"></span> Refeed — 2,000–2,500 cal</span>
+        <span><span class="swatch badge"></span> Badge (place after refeed)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 TIMELINE -->
+  <div class="spec">
+    <div class="spec-head"><span class="spec-index">10</span><span class="spec-name">Timeline</span><span class="spec-trigger">Triggered by: week-by-week / stage-by-stage progression</span></div>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-stage">Week 1</div><ul><li>Scale down 3–6 lb</li><li>Mostly glycogen and water</li><li>Some genuine fat loss begins</li></ul></div>
+      <div class="tl-item"><div class="tl-stage">Week 2</div><ul><li>Fat loss becomes the main driver</li><li>Strength may dip slightly</li></ul></div>
+      <div class="tl-item"><div class="tl-stage">Outcome (10–14 days)</div><ul><li>2–4 lb actual fat lost</li><li>Noticeably leaner appearance</li></ul></div>
+    </div>
+  </div>
+
+  <!-- 11 CALLOUT -->
+  <div class="spec">
+    <div class="spec-head"><span class="spec-index">11</span><span class="spec-name">Callout</span><span class="spec-trigger">Triggered by: a warning, caveat, or reassess note (blockquote)</span></div>
+    <div class="callout">
+      <div class="c-label">Reassess</div>
+      <p>Repeat the 6–7 day PSMF / 1 refeed cycle for 2–4 weeks total, then reassess body composition, training performance, and whether to continue, hold, or transition to a slower deficit.</p>
+    </div>
+  </div>
+
+  <!-- 12 CHIP LIST -->
+  <div class="spec">
+    <div class="spec-head"><span class="spec-index">12</span><span class="spec-name">Chip List</span><span class="spec-trigger">Triggered by: a flat enumeration / menu of options</span></div>
+    <div class="chip-list">
+      <span class="chip">Sweet potatoes</span><span class="chip">Oatmeal</span><span class="chip">Bananas</span>
+      <span class="chip">Berries</span><span class="chip">White rice</span><span class="chip">Potatoes</span>
+      <span class="chip">Rice cakes</span><span class="chip">Low-fat cereal</span><span class="chip">Bagels</span>
+    </div>
+  </div>
+
+  <!-- 13 FOOTER -->
+  <div class="spec" style="border-bottom:none;">
+    <div class="spec-head"><span class="spec-index">13</span><span class="spec-name">Footer</span><span class="spec-trigger">Triggered by: the closing line of the sheet</span></div>
+    <footer style="padding:24px 0 0;">PSMF Protocol Sheet — generated for reference. Reassess after each cycle.</footer>
+  </div>
+
+</div>
+</body>
+</html>

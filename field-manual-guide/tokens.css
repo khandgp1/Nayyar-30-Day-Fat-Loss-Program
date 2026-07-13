@@ -1,0 +1,107 @@
+/* =====================================================================
+   DESIGN TOKENS — "Recon"
+   Extracted and formalized from Sample_C_Field_Manual.pdf
+   (Eyemaxxing — Field Manual, Rev. 01)
+   ---------------------------------------------------------------------
+   This file has TWO sections:
+
+     1. LOCKED  — the fixed brand. Never swap these per product.
+                  (fonts, spacing, radii, structure, accent semantics)
+     2. THEME   — the current palette ("Recon"). To add a future theme,
+                  copy the THEME block, change only the color values, and
+                  keep every variable name. Nothing else needs to move.
+
+   This is a SINGLE-ACCENT brand: one amber "command" accent does
+   structure, emphasis, AND warning. Meaning survives a re-theme even if
+   the hue changes:
+     --accent-command  → directive / action / attention  (the one loud voice)
+
+   Surfaces are DUAL and first-class:
+     --band-*  → dark navy "band" surface (banner, hero, section headers)
+     --page-*  → light "page" surface     (section bodies, lists, callouts)
+   ===================================================================== */
+
+/* ------------------------------ LOCKED ------------------------------ */
+:root{
+  /* Fonts — the locked brand pair. Two families, no serif.
+     display = wordmark/titles/body (weight-differentiated), mono = meta/labels.
+     Chosen as close substitutes for the PDF's embedded faces. */
+  --font-display: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono:    'Space Mono', ui-monospace, 'IBM Plex Mono', monospace;
+
+  /* Layout */
+  --maxw: 880px;          /* content column */
+  --gutter: 28px;         /* horizontal padding inside bands/page */
+  --banner-h: 80px;       /* full-bleed top banner height */
+
+  /* Spacing scale (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* Radii */
+  --radius-marker: 7px;   /* bordered-square list markers */
+  --radius-pill:   7px;   /* label pills (rounded rectangle, not a full pill) */
+  --radius-card:   10px;  /* index cards, callouts */
+
+  /* Borders */
+  --border-w: 1px;
+  --border-w-accent: 1.5px;  /* the amber callout outline */
+  --marker-size: 34px;       /* square list-marker box */
+
+  /* Type scale (fluid where it matters) */
+  --fs-wordmark: clamp(3.2rem, 11vw, 7rem);   /* the giant split-color hero word */
+  --fs-h2:       clamp(2rem, 5.5vw, 3.1rem);  /* section-header-band title */
+  --fs-body:     1.06rem;                     /* body copy / list items */
+  --fs-lead:     1.14rem;                     /* hero subhead */
+  --fs-meta:     12px;                        /* mono banner / footer meta */
+  --fs-eyebrow:  12.5px;                      /* mono eyebrows above titles */
+  --fs-label:    12px;                        /* mono pill / callout labels */
+  --fs-index:    11px;                        /* SEC 0X card labels */
+  --lh-body: 1.55;
+
+  /* Letter-spacing (mono meta is always wide) */
+  --ls-meta:    0.16em;
+  --ls-eyebrow: 0.2em;
+  --ls-label:   0.12em;
+  --ls-tight:  -0.02em;   /* the heavy display wordmark */
+}
+
+/* ------------------------------ THEME ------------------------------- */
+/* "Recon" — the original Field Manual palette.
+   Copy this whole block to re-theme. Keep every variable NAME. */
+:root{
+  /* Dark "band" surface (banner backdrop, hero, section headers) */
+  --band-bg:   #0D2133;   /* deep navy — the field-manual backdrop */
+  --band-line: #1C3446;   /* hairline borders on navy (index cards, dividers) */
+  --band-text: #E9F1F6;   /* near-white primary text on navy */
+  --band-dim:  #9FB4C4;   /* secondary text on navy (subheads, "Target:" lines) */
+  --band-mute: #5C7589;   /* footer / meta text on navy */
+
+  /* Light "page" surface (section bodies, lists, callouts) */
+  --page-bg:   #F5F6F9;   /* light body background */
+  --page-card: #FFFFFF;   /* raised card / cell fill */
+  --page-line: #E1E6EC;   /* hairline borders on light */
+  --page-text: #22384A;   /* primary body text (dark slate-navy) */
+  --page-dim:  #5A6B80;   /* secondary body text */
+  --page-mute: #8A98A8;   /* captions / least emphasis */
+
+  /* Accent — the single "command" accent + its tints */
+  --accent-command:      #F4A531;   /* THE amber: banner, wordmark, pills, eyebrows, callout outline */
+  --accent-command-ink:  #0D2133;   /* dark text placed ON amber (pills, banner) */
+  --accent-command-deep: #997131;   /* readable amber-brown for text on cream */
+  --accent-command-tint: #FFF6EB;   /* cream fill for the safety callout */
+  --marker-line:         #E9FAF3;   /* faint cool tint option for markers (defaults to --page-line) */
+
+  /* Reserved (unused by the source; do NOT introduce without a reason):
+     a future do/don't "positive" state would live here. */
+  --accent-confirm: #6be3c4;
+}

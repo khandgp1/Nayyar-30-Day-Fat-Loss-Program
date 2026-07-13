@@ -1,0 +1,93 @@
+/* =====================================================================
+   DESIGN TOKENS
+   Extracted and formalized from psmf-protocol.html
+   ---------------------------------------------------------------------
+   This file has TWO sections:
+
+     1. LOCKED  — the fixed brand. Never swap these per product.
+                  (fonts, spacing, radii, structure, semantics of accents)
+     2. THEME   — the current palette. To add a future theme, copy the
+                  THEME block, change only the color values, and keep the
+                  same variable names. Nothing else needs to move.
+
+   Semantic accent roles (meaning travels across themes even if hues change):
+     --accent-effort   → intensity / deficit / exertion   (the "push")
+     --accent-recover  → rest / refeed / positive          (the "recovery")
+     --accent-warn     → caution / reassess / attention
+   ===================================================================== */
+
+/* ------------------------------ LOCKED ------------------------------ */
+:root{
+  /* Fonts — the locked brand trio. Do not swap per product.
+     display = structure/headings, mono = data/labels, editorial = voice */
+  --font-display:   'Space Grotesk', system-ui, sans-serif;
+  --font-mono:      'IBM Plex Mono', ui-monospace, monospace;
+  --font-editorial: 'Source Serif 4', Georgia, serif;
+
+  /* Layout */
+  --maxw: 860px;
+  --gutter: 24px;
+
+  /* Spacing scale (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-14: 56px;
+  --space-18: 72px;
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius:    10px;
+  --radius-pill: 999px;
+
+  /* Borders */
+  --border-w: 1px;
+
+  /* Type scale (fluid where it matters) */
+  --fs-h1: clamp(2.4rem, 6vw, 4.2rem);
+  --fs-h2: clamp(1.6rem, 4vw, 2.2rem);
+  --fs-lead: 1.02rem;
+  --fs-label: 11px;      /* uppercase mono labels */
+  --fs-eyebrow: 12px;    /* uppercase mono eyebrows */
+  --fs-data: 1.5rem;     /* mono stat numbers */
+  --lh-body: 1.55;
+
+  /* Letter-spacing */
+  --ls-label: 0.1em;
+  --ls-eyebrow: 0.18em;
+  --ls-tight: -0.02em;
+}
+
+/* ------------------------------ THEME ------------------------------- */
+/* "Burn" — the original PSMF palette. Copy this whole block to re-theme. */
+:root{
+  /* Surface ramp (dark → cards) */
+  --bg:       #101411;
+  --bg-soft:  #161b17;
+  --card:     #1b211c;
+  --line:     #2c352e;
+
+  /* Text ramp */
+  --text:      #e9ece7;
+  --text-dim:  #93a193;
+  --text-mute: #5e6b60;
+
+  /* Accent: EFFORT — intensity / deficit / exertion */
+  --accent-effort:     #ff6a45;
+  --accent-effort-dim: #6b3527;
+
+  /* Accent: RECOVER — rest / refeed / positive */
+  --accent-recover:     #6be3c4;
+  --accent-recover-dim: #2c4f47;
+
+  /* Accent: WARN — caution / reassess */
+  --accent-warn: #f0c75e;
+
+  /* Background grid tint (theme-dependent) */
+  --grid-line: rgba(255,255,255,0.018);
+}
