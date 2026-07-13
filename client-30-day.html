@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Your 30-Day Fat Loss Plan</title>
+<title>30-Day Fat Loss · Daily Protocol</title>
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap');
@@ -76,6 +76,8 @@
   .body p:last-child{ margin-bottom: 0; }
   .body strong{ color: var(--text); font-weight: 600; }
   .kick{ font-family: var(--font-mono); font-size: var(--fs-label); text-transform: uppercase; letter-spacing: var(--ls-label); color: var(--text-mute); display:block; margin-bottom: 4px; }
+  .task{ position: relative; padding-left: 32px; }
+  .task::before{ content:""; position: absolute; left: 0; top: 2px; width: 13px; height: 13px; border: 2px solid var(--accent-effort); border-radius: 50%; }
   .exit{ font-family: var(--font-mono); font-size: 12px; color: var(--text-mute); margin-top: 22px; letter-spacing: 0.03em; }
   .exit b{ color: var(--accent-recover); font-weight: 600; }
   .caption{ font-family: var(--font-mono); font-size: 11px; color: var(--text-mute); letter-spacing: 0.04em; margin-top: 12px; }
@@ -87,16 +89,15 @@
   /* 01 HERO */
   .tag{ font-family: var(--font-mono); font-size: var(--fs-eyebrow); letter-spacing: var(--ls-eyebrow); text-transform: uppercase; color: var(--accent-effort); margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
   .tag::before{ content:""; width: 8px; height: 8px; background: var(--accent-effort); border-radius: 50%; display:inline-block; box-shadow: 0 0 0 4px var(--accent-effort-dim); }
-  .hero h1{ font-size: var(--fs-h1); font-weight: 700; letter-spacing: var(--ls-tight); line-height: 1.04; margin-bottom: 22px; }
+  .hero h1{ font-size: var(--fs-h1); font-weight: 700; letter-spacing: var(--ls-tight); line-height: 1.04; margin-bottom: 36px; }
   .hero h1 em{ font-style: normal; color: var(--accent-effort); }
-  .hero-sub{ font-family: var(--font-editorial); font-style: italic; color: var(--text-dim); font-size: 1.15rem; max-width: 560px; margin-bottom: 36px; }
 
-  /* 02 STATLINE */
+  /* 02 STATLINE — repurposed as the Daily Loop strip */
   .statline{ display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
   .statline .stat{ padding: 16px 14px; border-right: 1px solid var(--line); }
   .statline .stat:last-child{ border-right: none; }
-  .stat-num{ font-family: var(--font-mono); font-size: var(--fs-data); font-weight: 600; color: var(--text); }
-  .stat-label{ font-size: var(--fs-label); text-transform: uppercase; letter-spacing: var(--ls-label); color: var(--text-mute); margin-top: 4px; }
+  .stat-step{ font-family: var(--font-mono); font-size: var(--fs-label); text-transform: uppercase; letter-spacing: var(--ls-label); color: var(--text-mute); }
+  .stat-act{ font-weight: 600; font-size: 0.98rem; color: var(--text); margin-top: 6px; }
 
   /* 03 SECTION HEADER */
   .eyebrow{ font-family: var(--font-mono); font-size: var(--fs-eyebrow); letter-spacing: var(--ls-eyebrow); text-transform: uppercase; color: var(--text-mute); margin-bottom: 12px; }
@@ -121,25 +122,6 @@
   .c-card li:last-child{ border-bottom: none; }
   .arrow-note{ margin-top: 18px; font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-mute); padding: 14px 16px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--line); }
   .arrow-note .target{ color: var(--text); }
-
-  /* 09 SCHEDULE STRIP */
-  .schedule{ margin-top: 32px; }
-  .schedule-row{ display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
-  .cell{ border-radius: var(--radius); padding: 18px 10px; text-align: center; border: 1px solid var(--line); position: relative; transition: transform 0.15s ease; }
-  .cell:hover{ transform: translateY(-3px); }
-  .cell-num{ font-family: var(--font-mono); font-size: 11px; color: var(--text-mute); margin-bottom: 10px; }
-  .cell-type{ font-weight: 600; font-size: 0.95rem; }
-  .cell.type-a{ background: linear-gradient(180deg, var(--bg-soft), var(--card)); }
-  .cell.type-a .cell-type{ color: var(--accent-effort); }
-  .cell.type-b{ background: linear-gradient(180deg, var(--accent-recover-dim), var(--card)); border-color: var(--accent-recover-dim); }
-  .cell.type-b .cell-type{ color: var(--accent-recover); }
-  .cell.badge::after{ content: attr(data-badge); position: absolute; top: 6px; right: 6px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; color: var(--accent-warn); border: 1px solid var(--accent-warn); border-radius: 4px; padding: 1px 4px; }
-  .schedule-legend{ display: flex; gap: 24px; margin-top: 18px; flex-wrap: wrap; }
-  .schedule-legend span{ font-family: var(--font-mono); font-size: 12px; color: var(--text-mute); display: flex; align-items: center; gap: 8px; }
-  .swatch{ width: 12px; height: 12px; border-radius: 3px; display:inline-block; }
-  .swatch.a{ background: var(--accent-effort); }
-  .swatch.b{ background: var(--accent-recover); }
-  .swatch.badge{ border: 1px solid var(--accent-warn); }
 
   /* 10 TIMELINE */
   .timeline{ margin-top: 28px; border-left: 1px solid var(--line); padding-left: 28px; }
@@ -168,10 +150,6 @@
     .statline{ grid-template-columns: repeat(2, 1fr); }
     .statline .stat:nth-child(2){ border-right: none; }
     .compare-grid{ grid-template-columns: 1fr; }
-    .schedule-row{ grid-template-columns: repeat(7, 1fr); gap: 4px; }
-    .cell{ padding: 10px 4px; }
-    .cell-type{ font-size: 0.72rem; }
-    .cell-num{ font-size: 9px; }
     table{ font-size: 0.82rem; }
     th, td{ padding: 8px 6px; }
   }
@@ -184,45 +162,28 @@
   <!-- HERO + STATLINE -->
   <section class="section">
     <div class="hero">
-      <div class="tag">30-Day Fat Loss · Your Program Sheet</div>
-      <h1>Thirty days. One <em>habit at a time.</em></h1>
-      <p class="hero-sub">Nothing you love gets banned. You add one small thing a day until, by the end, most of your day runs itself — before you make a single decision.</p>
+      <div class="tag">30-Day Fat Loss · Daily Protocol</div>
+      <h1>The 30-Day <em>Fat Loss</em> Protocol.</h1>
     </div>
     <div class="statline">
-      <div class="stat"><div class="stat-num">30</div><div class="stat-label">Days</div></div>
-      <div class="stat"><div class="stat-num">2L</div><div class="stat-label">Water, morning</div></div>
-      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Foods you prep</div></div>
-      <div class="stat"><div class="stat-num">0</div><div class="stat-label">Foods banned</div></div>
+      <div class="stat"><div class="stat-step">Wake</div><div class="stat-act">2L water first</div></div>
+      <div class="stat"><div class="stat-step">Eat</div><div class="stat-act">Prepped food first</div></div>
+      <div class="stat"><div class="stat-step">Day</div><div class="stat-act">The rest is yours</div></div>
+      <div class="stat"><div class="stat-step">Night</div><div class="stat-act">Prep tomorrow</div></div>
     </div>
   </section>
 
-  <!-- 00 HOW THIS WORKS -->
+  <!-- 00 HOW TO USE THIS PROGRAM -->
   <section class="section">
-    <div class="eyebrow">00 — How this works</div>
-    <h2>You add. You don't subtract.</h2>
-    <p class="lead">Every day installs one habit and keeps the ones before it. Your old foods aren't forbidden — the new ones just crowd them out. By Day 7 your morning runs on autopilot, and from there it only gets easier.</p>
-  </section>
-
-  <!-- WEEK 1 AT A GLANCE (Schedule Strip) -->
-  <section class="section">
-    <div class="eyebrow">Week 1 — At a glance</div>
-    <h2>The first seven days.</h2>
-    <p class="lead">Most days add one thing. One day is a breather. Day 3 is a taste checkpoint. That's the whole first week.</p>
-    <div class="schedule">
-      <div class="schedule-row">
-        <div class="cell type-a"><div class="cell-num">DAY 1</div><div class="cell-type">Water</div></div>
-        <div class="cell type-a"><div class="cell-num">DAY 2</div><div class="cell-type">Ritual</div></div>
-        <div class="cell type-a badge" data-badge="TASTE"><div class="cell-num">DAY 3</div><div class="cell-type">Check</div></div>
-        <div class="cell type-a"><div class="cell-num">DAY 4</div><div class="cell-type">Portion</div></div>
-        <div class="cell type-a"><div class="cell-num">DAY 5</div><div class="cell-type">Veg</div></div>
-        <div class="cell type-b"><div class="cell-num">DAY 6</div><div class="cell-type">Breather</div></div>
-        <div class="cell type-a badge" data-badge="WEEK 1"><div class="cell-num">DAY 7</div><div class="cell-type">Carb</div></div>
-      </div>
-      <div class="schedule-legend">
-        <span><span class="swatch a"></span> Install day — one new habit</span>
-        <span><span class="swatch b"></span> Breather — catch up, adjust</span>
-        <span><span class="swatch badge"></span> Checkpoint</span>
-      </div>
+    <div class="eyebrow">00 — How to use this program</div>
+    <h2>Open today's day. Do it. Close the page.</h2>
+    <p class="lead">The strip up top is the rhythm these thirty days build. Each day below adds one piece of it. Five rules for using this page:</p>
+    <div class="body">
+      <p><span class="kick">1 · Only today</span>Each morning, open the first Day with an empty circle left on it and do its tasks. Don't read ahead and don't plan the week. The Day in front of you is the whole job.</p>
+      <p><span class="kick">2 · A Day isn't a calendar day</span>Each Day is sized to fit in one, but it's finished when its tasks are finished, not at midnight. If a Day takes you two, fine. The next Day starts only when this one is closed.</p>
+      <p><span class="kick">3 · Check it off</span>Every circle is a task. The Day is done when every circle on it is done.</p>
+      <p><span class="kick">4 · Yesterday keeps running</span>Each new Day adds to the ones before it. Nothing you've installed gets dropped.</p>
+      <p><span class="kick">5 · Check in, unprompted</span>Your check-ins are what I coach from, so send them without being asked. When you close a Day, tell me how it went. When a Day asks for a photo, a pick, or an answer, send it the same day. If something isn't working, say so immediately. That's what I'm here for.</p>
     </div>
   </section>
 
@@ -230,11 +191,11 @@
   <section class="section">
     <div class="eyebrow">Day 0 — Get set up</div>
     <h2>Three things today. Then you start.</h2>
-    <p class="lead">No food changes yet — today is just tools and picks, so Day 1 has something to stand on.</p>
+    <p class="lead">No food changes yet. Today is just tools and picks.</p>
     <div class="body">
-      <p><span class="kick">Task 1 · The scale</span>Buy a <strong>digital kitchen food scale that measures in grams</strong> — any brand, under $20. Get it <strong>today</strong> (in-store or same-day). It's the one tool everything else needs.</p>
-      <p><span class="kick">Task 2 · Yogurt recon</span>Buy <strong>plain 0% Greek yogurt</strong> — a few different brands. The only filter: the ingredients read <strong>milk + live cultures, nothing else</strong>. No added sugar, no "vanilla," no "honey" — those hide 10–15g of sugar. Send a <strong>photo of each tub's label</strong>.</p>
-      <p><span class="kick">Task 3 · Pick your proteins</span>From the list below, tell me your <strong>top 3</strong> — just the three you'd actually eat. It's not exhaustive; if you eat something lean that's missing, say so.</p>
+      <p class="task"><span class="kick">Task 1 · The scale</span>Buy a <strong>digital kitchen food scale that measures in grams</strong>. Any brand under $20 works. Get it <strong>today</strong> (in-store or same-day). It's the one tool everything else needs.</p>
+      <p class="task"><span class="kick">Task 2 · Yogurt recon</span>Buy <strong>plain 0% Greek yogurt</strong>, a few different brands. The only filter: the ingredients read <strong>milk + live cultures, nothing else</strong>. No added sugar, no "vanilla," no "honey." Those flavors hide 10–15g of sugar. Send a <strong>photo of each tub's label</strong>.</p>
+      <p class="task"><span class="kick">Task 3 · Pick your proteins</span>From the list below, tell me your <strong>top 3</strong>: just the three you'd actually eat. It's not exhaustive; if you eat something lean that's missing, say so.</p>
     </div>
     <div class="chip-list">
       <span class="chip">Tuna / chicken pouch (in water)</span>
@@ -254,21 +215,24 @@
   <section class="section">
     <div class="eyebrow">Day 1 — Water in, yogurt in</div>
     <h2>Two easy installs.</h2>
-    <p class="lead">Light on purpose — this gives Day 0 room to finish.</p>
     <div class="body">
-      <p><span class="kick">Every morning from now on</span>On waking, drink <strong>2 liters of water — before coffee, before food</strong>. Big bottle, first thing. That's the whole task. (No bottle with a steel or glass interior? Grab a good one today.)</p>
-      <p><span class="kick">Start the yogurt</span>Start eating the yogurt — <strong>any amount</strong>, a spoonful or half a tub. You bought a few brands: find the one you genuinely like. That's the one we build on.</p>
+      <p class="task"><span class="kick">Every morning from now on</span>On waking, drink <strong>2 liters of water, before coffee and before food</strong>. Big bottle, first thing. That's the whole task. (No bottle with a steel or glass interior? Grab a good one today.)</p>
+      <p class="task"><span class="kick">Start the yogurt</span>Start eating the yogurt. <strong>Any amount</strong> counts: a spoonful or half a tub. You bought a few brands: find the one you genuinely like. That's the one we build on.</p>
     </div>
   </section>
 
   <!-- DAY 2 -->
   <section class="section">
     <div class="eyebrow">Day 2 — The evening ritual + your first meat</div>
-    <h2>Tonight, you prep tomorrow's breakfast.</h2>
+    <h2>Tonight, you prep tomorrow's first food.</h2>
     <p class="lead">This is where the structure starts doing the work for you.</p>
     <div class="body">
-      <p><span class="kick">The evening ritual — tonight, then every night</span>Weigh <strong>one serving of yogurt</strong> (serving size is on the tub) into a container, lid on, into the fridge. That's tomorrow's breakfast, already waiting. Your morning becomes: wake → water → the yogurt that's sitting there.</p>
-      <p><span class="kick">The meat run — buy, cook, eat today</span>From your top 3, <strong>pick one</strong>. Buy enough for the week, prepare it, and eat it — today. You're in the driver's seat on how it's made: seasoning, sides, your taste. Already-cooked options make this easy. Then send a quick report: a photo, what you picked, how you prepped it, and where you bought it.</p>
+      <p class="task"><span class="kick">The evening ritual · tonight, then every night</span>Weigh <strong>one serving of yogurt</strong> (serving size is on the tub) into a container, lid on, into the fridge. That's tomorrow's first food, already waiting. Your day starts itself: wake → water → the yogurt that's sitting there, whenever you start eating.</p>
+      <p class="task"><span class="kick">The meat run · buy, cook, eat today</span>From your top 3, <strong>pick one</strong>. Buy enough for the week, prepare it, and eat it. Today. You're in the driver's seat on how it's made: seasoning, sides, your taste. Already-cooked options make this easy. Then send a quick report: a photo, what you picked, how you prepped it, and where you bought it.</p>
+    </div>
+    <div class="callout">
+      <div class="c-label">Need ideas?</div>
+      <p>Recipes, seasonings, cooking methods, easy shortcuts. If you're stuck on any of it, just ask.</p>
     </div>
   </section>
 
@@ -276,15 +240,15 @@
   <section class="section">
     <div class="eyebrow">Day 3 — Taste check</div>
     <h2>Does it actually taste good?</h2>
-    <p class="lead">A lean meat you only tolerate disappears from your plate by week two — so we fix taste now, before it becomes a problem.</p>
+    <p class="lead">A lean meat you only tolerate disappears from your plate by week two, so we fix taste now, before it becomes a problem.</p>
     <div class="body">
-      <p>Be honest — <strong>"it was fine" counts as a no.</strong> Three ways this can go:</p>
+      <p>Be honest: <strong>"it was fine" counts as a no.</strong> Three ways this can go:</p>
       <ul>
-        <li><strong>You liked it</strong> — great, keep it. We can still tune the seasoning if you want.</li>
-        <li><strong>Close but not there</strong> — let's make it better: seasoning, a sauce, a different cooking method. Small fixes beat starting over.</li>
-        <li><strong>Not working</strong> — swap it for another pick, no penalty. (Easiest option on the board if you want it: pre-cooked chicken breast strips — no prep, hard to get wrong.)</li>
+        <li><strong>You liked it.</strong> Great, keep it. We can still tune the seasoning if you want.</li>
+        <li><strong>Close but not there.</strong> Let's make it better: seasoning, a sauce, a different cooking method. Small fixes beat starting over.</li>
+        <li><strong>Not working.</strong> Swap it for another pick. (Easiest option on the board: pre-cooked chicken breast strips. No prep, hard to get wrong.)</li>
       </ul>
-      <p>If you swap, just <strong>repeat the meat run today</strong> with the new pick — buy, cook, eat, report. No days lost.</p>
+      <p>If you swap, just <strong>repeat the meat run today</strong> with the new pick: buy, cook, eat, report.</p>
     </div>
   </section>
 
@@ -292,9 +256,9 @@
   <section class="section">
     <div class="eyebrow">Day 4 — Portion the meat</div>
     <h2>The ritual grows one step.</h2>
-    <p class="lead">One thing worth knowing: meat is mostly water, so grams on the scale isn't grams of protein. You don't need the math — just a portion size.</p>
+    <p class="lead">One thing worth knowing: meat is mostly water, so grams on the scale isn't grams of protein. You don't need the math, just a portion size.</p>
     <div class="body">
-      <p><span class="kick">Tonight, then every night</span>After the yogurt, weigh out <strong>one portion of your cooked meat</strong> and add it to the fridge — ready to grab tomorrow. Scale tip: put the empty container on, hit <strong>tare/zero</strong>, then add the food so the scale reads just the meat.</p>
+      <p class="task"><span class="kick">Tonight, then every night</span>After the yogurt, weigh out <strong>one portion of your cooked meat</strong> and add it to the fridge, ready to grab tomorrow. Scale tip: put the empty container on, hit <strong>tare/zero</strong>, then add the food so the scale reads just the meat.</p>
     </div>
     <table>
       <thead><tr><th>Your protein</th><th class="num">One good portion</th></tr></thead>
@@ -311,7 +275,7 @@
     <p class="caption">Find your pick and weigh out about one portion per meal. Once your food is locked in, I'll give you one exact number for it.</p>
     <div class="callout">
       <div class="c-label">The one strict rule</div>
-      <p>Your prepped food is always the <strong style="color:var(--text)">first food you eat each day</strong>. Water first, then the containers, before anything else. Be strict about this one — everything you eat <em>after</em> it is still completely yours.</p>
+      <p>Your prepped food is always the <strong style="color:var(--text)">first food you eat each day</strong>. Water first, then the containers, before anything else. Be strict about this one. Everything you eat <em>after</em> it is still completely yours.</p>
     </div>
   </section>
 
@@ -319,10 +283,9 @@
   <section class="section">
     <div class="eyebrow">Day 5 — A vegetable joins the stack</div>
     <h2>The one food that makes everything after it easier.</h2>
-    <p class="lead">High-volume, fills you up, almost no calories — so every later change lands on someone who's already full.</p>
     <div class="body">
-      <p><span class="kick">First — a quick check</span>Is broccoli a hard no? If so, we swap in <strong>green beans, cauliflower, or a mixed medley</strong> — same frozen steam-in-bag category, same task. No point installing a food you've already decided against.</p>
-      <p><span class="kick">Then — buy it, learn it, stack it</span>Grab a couple brands of <strong>frozen steam-in-bag</strong> vegetables. Learn it (it's a microwave and a few minutes), taste it today, and tonight add a serving to the prep — alongside the yogurt and the meat. Three containers now.</p>
+      <p class="task"><span class="kick">First · a quick check</span>Is broccoli a hard no? If so, tell me before you buy and we'll pick something else. Same frozen steam-in-bag category, same task. No point installing a food you've already decided against.</p>
+      <p class="task"><span class="kick">Then · buy it, learn it, stack it</span>Grab <strong>frozen steam-in-bag</strong> vegetables, taste it today, and tonight add a serving to the prep, alongside the yogurt and the meat. Three containers now.</p>
     </div>
     <div class="compare-grid">
       <div class="c-card positive">
@@ -353,8 +316,13 @@
     <h2>A breather, and a look ahead.</h2>
     <p class="lead">Five days of stacking earns a day to close loose ends. Nothing new lands today.</p>
     <div class="body">
-      <p>Anything from Day 0–5 that's still open, we finish. Anything that isn't clicking — a meat that's stalling, a step that keeps slipping — we talk through and fix.</p>
-      <p><span class="kick">Two quick things for later</span>First: roughly what time is the <strong>earliest</strong> you start eating, and the <strong>latest</strong>? Second: from these carbs, which would you <strong>actually eat</strong>? (Not exhaustive — tell me if a favorite's missing.)</p>
+      <p>Anything from Day 0–5 that's still open, we finish. If something isn't clicking (a meat that's stalling, a step that keeps slipping), we talk it through and fix it.</p>
+      <p class="task"><span class="kick">Three quick things for later</span></p>
+      <ol>
+        <li>Roughly what time is the <strong>earliest</strong> you start eating, and the <strong>latest</strong> you'd ever start?</li>
+        <li>From these carbs, which would you <strong>actually eat</strong>? (The list isn't exhaustive, so tell me if a favorite's missing.)</li>
+        <li>Accurate number, not the ideal one: how many bottles of water are you actually getting through in a day, morning included?</li>
+      </ol>
     </div>
     <div class="chip-list">
       <span class="chip">White / brown rice</span>
@@ -372,27 +340,33 @@
   <section class="section">
     <div class="eyebrow">Day 7 — Week one, done</div>
     <h2>One week in. Your morning is owned.</h2>
-    <p class="lead">Genuinely — three foods adopted, a ritual running nightly, and not one thing you love has been banned. Three small moves close the week.</p>
+    <p class="lead">One week in, and you built it: three foods adopted, a ritual running nightly. One small move closes the week.</p>
     <div class="body">
-      <p><span class="kick">Task 1 · One more bottle</span>Take your daily water count and <strong>add one more bottle</strong> — anywhere in the day. That's the new number. (Morning 2L is unchanged.)</p>
-      <p><span class="kick">Task 2 · A start line</span><strong>Never eat earlier than the time you already start eating.</strong> You already do this — now it's just a line. (Water, black coffee, and plain tea are always fine.)</p>
-      <p><span class="kick">Task 3 · Your first carb</span>From your list, we start with one pick. Buy enough for the week, and tonight add a serving to the prep — alongside the yogurt, meat, and vegetable. <strong>Four containers now.</strong></p>
+      <p class="task"><span class="kick">Your first carb</span>From your list, we start with one pick. Buy enough for the week, and tonight add a serving to the prep, alongside the yogurt, meat, and vegetable. <strong>Four containers now.</strong></p>
     </div>
-    <p class="exit">The board: <b>start-time → 2L water → prepped food first → your bottles through the day → prep tomorrow tonight.</b></p>
+    <p class="exit">The board: <b>prepped food first → prep tomorrow tonight.</b></p>
+  </section>
+
+  <!-- MILESTONE -->
+  <section class="section">
+    <div class="eyebrow">🎉 Milestone</div>
+    <h2>You built a whole system in a week. 🔥</h2>
+    <p class="lead">Wake time, 2 liters of water, prepped containers, a ritual running every night. You built it, ran it daily, and it held. That's the hard part, done.</p>
+    <p class="exit">Today's only assignment: <b>enjoy it. 🏆</b></p>
   </section>
 
   <!-- WEEKS 2-4 (Timeline + Callout) -->
   <section class="section">
     <div class="eyebrow">Weeks 2–4 — It keeps running</div>
-    <h2>Same board, small changes.</h2>
-    <p class="lead">The routine you built in week one is the whole engine. From here it just gets fine-tuned — and this is what a day looks like, every day.</p>
+    <h2>Same routine, small changes.</h2>
+    <p class="lead">The routine you built in week one is the whole engine. From here it just gets fine-tuned. This is what a day looks like, every day.</p>
     <div class="timeline">
       <div class="tl-item">
         <div class="tl-stage">Morning</div>
         <ul>
-          <li>Hold your start time — nothing before it</li>
+          <li>Hold your start time, nothing before it</li>
           <li>2 liters of water on waking</li>
-          <li>Your prepped containers first: yogurt, protein, vegetable, carb — before anything else</li>
+          <li>Your prepped containers before anything else: yogurt, protein, vegetable, carb</li>
         </ul>
       </div>
       <div class="tl-item">
@@ -405,28 +379,17 @@
       <div class="tl-item">
         <div class="tl-stage">Evening</div>
         <ul>
-          <li>Prep tomorrow's containers — same ritual, every night</li>
+          <li>Prep tomorrow's containers: same ritual, every night</li>
         </ul>
       </div>
     </div>
     <div class="callout">
       <div class="c-label">What's next</div>
-      <p>Weeks 2–4 are personalized to you. I'll add <strong style="color:var(--text)">one small change at a time</strong> — a bit more protein, a portion tweak, a longer morning window, some daily walking — based on how your check-ins go. Nothing to memorize now; you'll get each step when it's your turn. And tell me how you're feeling — that's the most useful thing you can report.</p>
+      <p>Weeks 2–4 are personalized to you. I'll add <strong style="color:var(--text)">one small change at a time</strong>, based on how your check-ins go: a bit more protein, a portion tweak, a longer morning window, some daily walking. Nothing to memorize now; you'll get each step when it's your turn. And tell me how you're feeling. That's the most useful thing you can report.</p>
     </div>
   </section>
 
-  <!-- AFTER -->
-  <section class="section">
-    <div class="eyebrow">After — When the push ends</div>
-    <h2>The program doesn't leave you on its hardest week.</h2>
-    <p class="lead">When the final push is done, you go back to exactly the routine you ran before it — same containers, same rituals, same rhythm. Nothing new to learn; you already lived it.</p>
-    <div class="callout">
-      <div class="c-label">Heads up</div>
-      <p>Expect the scale to tick up a couple of pounds that week. That's <strong style="color:var(--text)">water coming back with your carbs, not fat</strong>. It's completely expected and completely fine — don't let it rattle you.</p>
-    </div>
-  </section>
-
-  <footer>30-Day Fat Loss — your program sheet. One habit at a time; nothing you love banned.</footer>
+  <footer>30-Day Fat Loss · Daily Protocol</footer>
 
 </div>
 </body>
