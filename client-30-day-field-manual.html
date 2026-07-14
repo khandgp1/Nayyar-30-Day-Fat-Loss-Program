@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>30-Day Fat Loss · Field Manual</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&family=Space+Mono:wght@400;700&display=swap');
+
+  /* =====================================================================
+     DESIGN TOKENS  —  from field-manual-guide/tokens.css (LOCKED + "Recon" THEME)
+     ===================================================================== */
+  :root{
+    /* LOCKED — fonts */
+    --font-display: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-mono:    'Space Mono', ui-monospace, 'IBM Plex Mono', monospace;
+    /* LOCKED — layout */
+    --maxw: 880px;
+    --gutter: 28px;
+    --banner-h: 80px;
+    /* LOCKED — spacing */
+    --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+    --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px;
+    --space-12: 48px; --space-16: 64px; --space-20: 80px;
+    /* LOCKED — radii / borders */
+    --radius-marker: 7px; --radius-pill: 7px; --radius-card: 10px;
+    --border-w: 1px; --border-w-accent: 1.5px; --marker-size: 34px;
+    /* LOCKED — type scale */
+    --fs-wordmark: clamp(3.2rem, 11vw, 7rem);
+    --fs-h2:       clamp(2rem, 5.5vw, 3.1rem);
+    --fs-body:     1.06rem;
+    --fs-lead:     1.14rem;
+    --fs-meta:     12px;
+    --fs-eyebrow:  12.5px;
+    --fs-label:    12px;
+    --fs-index:    11px;
+    --lh-body: 1.55;
+    /* LOCKED — letter-spacing */
+    --ls-meta: 0.16em; --ls-eyebrow: 0.2em; --ls-label: 0.12em; --ls-tight: -0.02em;
+  }
+  :root{
+    /* THEME — "Recon" */
+    --band-bg: #0D2133; --band-line: #1C3446;
+    --band-text: #E9F1F6; --band-dim: #9FB4C4; --band-mute: #5C7589;
+    --page-bg: #F5F6F9; --page-card: #FFFFFF; --page-line: #E1E6EC;
+    --page-text: #22384A; --page-dim: #5A6B80; --page-mute: #8A98A8;
+    --accent-command: #F4A531; --accent-command-ink: #0D2133;
+    --accent-command-deep: #997131; --accent-command-tint: #FFF6EB;
+    --marker-line: #E9FAF3;
+  }
+
+  /* =====================================================================
+     BASE
+     ===================================================================== */
+  *{ box-sizing: border-box; margin:0; padding:0; }
+  html{ scroll-behavior: smooth; }
+  body{ background: var(--page-bg); font-family: var(--font-display); }
+  @media (prefers-reduced-motion: reduce){ *{ transition: none !important; } }
+
+  /* Reading-column wrapper — bands/pages paint full-bleed; this centers
+     their content in the maxw column (STYLE_GUIDE §5). */
+  .fm-inner{ max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); }
+
+  /* =====================================================================
+     COMPONENTS  —  from field-manual-guide/components.html (system rules)
+     ===================================================================== */
+
+  /* Surfaces */
+  .fm-band{ background: var(--band-bg); color: var(--band-text); padding: var(--space-12) 0; }
+  .fm-page{ background: var(--page-bg); color: var(--page-text); padding: var(--space-12) 0;
+    font-family: var(--font-display); font-size: var(--fs-body); line-height: var(--lh-body); }
+
+  /* 01 Top Banner */
+  .fm-banner{ background: var(--accent-command); color: var(--accent-command-ink);
+    min-height: var(--banner-h); display:flex; align-items:center; justify-content:space-between;
+    padding: 0 var(--gutter); font-family: var(--font-mono); font-weight:700; font-size: var(--fs-meta);
+    letter-spacing: var(--ls-meta); text-transform:uppercase; }
+
+  /* 02 Hero */
+  .fm-eyebrow{ font-family: var(--font-mono); font-size: var(--fs-eyebrow); letter-spacing: var(--ls-eyebrow);
+    text-transform:uppercase; color: var(--accent-command); margin:0 0 var(--space-8); }
+  .fm-wordmark{ font-family: var(--font-display); font-weight:900; font-size: var(--fs-wordmark);
+    letter-spacing: var(--ls-tight); line-height:.98; margin:0; color: var(--band-text); }
+  .fm-wordmark .hl{ color: var(--accent-command); }
+  .fm-lead{ font-family: var(--font-display); font-weight:400; font-size: var(--fs-lead);
+    line-height:1.5; color: var(--band-dim); max-width:52ch; margin: var(--space-10) 0 0; }
+
+  /* Spec Line (also used stacked, as the Hero's daily-rhythm strip) */
+  .fm-specline{ font-family: var(--font-display); font-size: var(--fs-body); margin:0; }
+  .fm-specline .k{ font-family: var(--font-mono); text-transform:uppercase; letter-spacing: var(--ls-label);
+    font-size: var(--fs-label); margin-right:8px; color: var(--accent-command-deep); }
+  .fm-page .fm-specline{ color: var(--page-text); }
+  .fm-band .fm-specline{ color: var(--band-text); }
+  .fm-band .fm-specline .k{ color: var(--accent-command); }
+  .fm-specline-group{ margin-top: var(--space-10); display:grid; gap: var(--space-3); }
+
+  /* 03 Section-Index Cards */
+  .fm-index{ display:grid; grid-template-columns:repeat(3,1fr); gap: var(--space-4); margin-top: var(--space-10); }
+  .fm-index-card{ border: var(--border-w) solid var(--band-line); border-radius: var(--radius-card); padding: var(--space-5); }
+  .fm-index-num{ font-family: var(--font-mono); font-size: var(--fs-index); letter-spacing: var(--ls-label);
+    text-transform:uppercase; color: var(--accent-command); margin:0 0 var(--space-3); }
+  .fm-index-title{ font-family: var(--font-display); font-weight:600; font-size:1.2rem; color: var(--band-text); }
+
+  /* 04 Section Header Band */
+  .fm-sechead-title{ font-family: var(--font-display); font-weight:800; font-size: var(--fs-h2);
+    letter-spacing: var(--ls-tight); line-height:1.05; color: var(--band-text); margin: var(--space-2) 0 var(--space-4); }
+  .fm-target{ font-family: var(--font-display); font-size: var(--fs-lead); color: var(--band-dim); margin:0; max-width:62ch; }
+  .fm-target b{ color: var(--band-text); font-weight:600; }
+
+  /* 05 Label Pill */
+  .fm-pill{ display:inline-block; background: var(--accent-command); color: var(--accent-command-ink);
+    font-family: var(--font-mono); font-weight:700; font-size: var(--fs-label); letter-spacing: var(--ls-label);
+    text-transform:uppercase; padding:8px 14px; border-radius: var(--radius-pill); }
+  .fm-pill-row{ display:flex; flex-wrap:wrap; gap:10px; margin-top: var(--space-5); }
+  .fm-pill-row .fm-pill{ background: var(--page-card); color: var(--page-dim); border: var(--border-w) solid var(--page-line);
+    font-weight:400; text-transform:none; letter-spacing:0.02em; }
+
+  /* 06/07 Marker Lists */
+  .fm-list{ list-style:none; margin: var(--space-6) 0 0; padding:0; display:grid; gap: var(--space-5); }
+  .fm-item{ display:flex; align-items:flex-start; gap: var(--space-4); }
+  .fm-marker{ flex:0 0 var(--marker-size); width: var(--marker-size); height: var(--marker-size);
+    display:flex; align-items:center; justify-content:center; border: var(--border-w) solid var(--page-line);
+    border-radius: var(--radius-marker); background: var(--page-card);
+    font-family: var(--font-mono); font-weight:700; font-size:15px; color: var(--page-dim); }
+  .fm-item-body{ padding-top:4px; color: var(--page-dim); }
+  .fm-item-body strong{ font-weight:700; color: var(--page-text); }
+
+  /* Base prose paragraphs on the page surface */
+  .fm-page p{ color: var(--page-dim); margin:0 0 var(--space-4); max-width:68ch; }
+  .fm-page p:last-child{ margin-bottom:0; }
+  .fm-page p strong{ color: var(--page-text); font-weight:600; }
+  .fm-caption{ font-family: var(--font-mono); font-size:11px; letter-spacing: var(--ls-label);
+    text-transform:uppercase; color: var(--page-mute); margin-top: var(--space-3); }
+
+  /* 08 Safety Callout */
+  .fm-callout{ background: var(--accent-command-tint); border: var(--border-w-accent) solid var(--accent-command);
+    border-radius: var(--radius-card); padding: var(--space-6); margin-top: var(--space-8); }
+  .fm-callout-label{ font-family: var(--font-mono); font-weight:700; font-size: var(--fs-label);
+    letter-spacing: var(--ls-label); text-transform:uppercase; color: var(--accent-command-deep); margin:0 0 var(--space-3); }
+  .fm-callout-body{ font-family: var(--font-display); color: var(--page-text); margin:0; line-height:1.5; }
+  .fm-callout.note{ background: var(--page-card); border-color: var(--page-line); }
+  .fm-callout.note .fm-callout-label{ color: var(--page-dim); }
+
+  /* Two-column compare (reuses Label Pill + Chevron list, no new component) */
+  .fm-compare{ display:grid; grid-template-columns:1fr 1fr; gap: var(--space-6); margin-top: var(--space-8); }
+
+  /* 10 Data Table */
+  .fm-table-wrap{ overflow-x:auto; margin-top: var(--space-6); }
+  .fm-table{ width:100%; border-collapse:collapse; font-family: var(--font-display); font-size: var(--fs-body); }
+  .fm-table th{ text-align:left; vertical-align:bottom; font-family: var(--font-mono); font-weight:700;
+    font-size: var(--fs-label); letter-spacing: var(--ls-label); text-transform:uppercase; color: var(--accent-command-deep);
+    padding:0 var(--space-5) var(--space-3) 0; border-bottom: var(--border-w-accent) solid var(--accent-command); }
+  .fm-table td{ padding: var(--space-3) var(--space-5) var(--space-3) 0; color: var(--page-text);
+    border-bottom: var(--border-w) solid var(--page-line); }
+  .fm-table th:last-child, .fm-table td:last-child{ padding-right:0; }
+  .fm-table tr:last-child td{ border-bottom:none; }
+  .fm-table td strong{ font-weight:700; }
+  .fm-table th.num, .fm-table td.num{ text-align:right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+  /* 11 Footer Meta Line */
+  .fm-footer{ display:flex; justify-content:space-between; gap: var(--space-4); font-family: var(--font-mono);
+    font-size: var(--fs-meta); letter-spacing: var(--ls-meta); text-transform:uppercase; color: var(--band-mute);
+    padding: var(--space-6) var(--gutter); background: var(--band-bg); }
+
+  /* Seam between stacked bands (hero → index) */
+  .fm-band + .fm-band{ border-top: var(--border-w) solid var(--band-line); }
+
+  /* Responsive */
+  @media (max-width:640px){
+    .fm-index, .fm-compare{ grid-template-columns:1fr; }
+    .fm-footer{ flex-direction:column; gap:6px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- COVER: banner + hero + index, grouped only so print.css can target
+       them as one page-1 unit (build-pdf.sh's injected stylesheet). No
+       styling hooks off this class on screen. -->
+  <div class="fm-cover">
+
+  <!-- 01 TOP BANNER -->
+  <div class="fm-banner"><span>30-Day Fat Loss Program</span><span>Client Protocol · Rev 01</span></div>
+
+  <!-- 02 HERO -->
+  <div class="fm-band fm-hero-band">
+    <div class="fm-inner">
+      <p class="fm-eyebrow">// Daily Protocol</p>
+      <h1 class="fm-wordmark">The 30-Day <span class="hl">Fat Loss</span> Protocol.</h1>
+      <p class="fm-lead">A day-by-day build: one small install at a time, until the whole thing runs on its own.</p>
+      <div class="fm-specline-group">
+        <p class="fm-specline"><span class="k">Wake</span>2L water first</p>
+        <p class="fm-specline"><span class="k">Eat</span>Prepped food first</p>
+        <p class="fm-specline"><span class="k">Day</span>The rest is yours</p>
+        <p class="fm-specline"><span class="k">Night</span>Prep tomorrow</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 SECTION-INDEX CARDS -->
+  <div class="fm-band">
+    <div class="fm-inner">
+      <div class="fm-index">
+        <div class="fm-index-card"><p class="fm-index-num">00</p><div class="fm-index-title">How To Use This</div></div>
+        <div class="fm-index-card"><p class="fm-index-num">Day 0</p><div class="fm-index-title">Get Set Up</div></div>
+        <div class="fm-index-card"><p class="fm-index-num">Day 1</p><div class="fm-index-title">Water + Yogurt</div></div>
+        <div class="fm-index-card"><p class="fm-index-num">Day 2</p><div class="fm-index-title">Evening Ritual</div></div>
+        <div class="fm-index-card"><p class="fm-index-num">Day 3</p><div class="fm-index-title">Taste Check</div></div>
+        <div class="fm-index-card"><p class="fm-index-num">Day 4</p><div class="fm-index-title">Portion The Meat</div></div>
+        <div class="fm-index-card"><p class="fm-index-num">Day 5</p><div class="fm-index-title">Add A Vegetable</div></div>
+        <div class="fm-index-card"><p class="fm-index-num">Day 6</p><div class="fm-index-title">Catch Up</div></div>
+        <div class="fm-index-card"><p class="fm-index-num">Day 7</p><div class="fm-index-title">Week One Done</div></div>
+        <div class="fm-index-card"><p class="fm-index-num">★</p><div class="fm-index-title">Milestone</div></div>
+        <div class="fm-index-card"><p class="fm-index-num">WK 2–4</p><div class="fm-index-title">It Keeps Running</div></div>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- /.fm-cover -->
+
+  <!-- 00 HOW TO USE THIS PROGRAM -->
+  <article class="fm-unit">
+    <div class="fm-band">
+      <div class="fm-inner">
+        <p class="fm-eyebrow">00 — How To Use This Program</p>
+        <h2 class="fm-sechead-title">Open Today's Day. Do It. Close The Page.</h2>
+        <p class="fm-target">The strip up top is the rhythm these thirty days build. Each day below adds one piece of it. Five rules for using this page:</p>
+      </div>
+    </div>
+    <div class="fm-page">
+      <div class="fm-inner">
+        <ol class="fm-list">
+          <li class="fm-item"><span class="fm-marker">1</span><div class="fm-item-body"><strong>Only today.</strong> Each morning, open the first Day with an empty circle left on it and do its tasks. Don't read ahead and don't plan the week. The Day in front of you is the whole job.</div></li>
+          <li class="fm-item"><span class="fm-marker">2</span><div class="fm-item-body"><strong>A Day isn't a calendar day.</strong> Each Day is sized to fit in one, but it's finished when its tasks are finished, not at midnight. If a Day takes you two, fine. The next Day starts only when this one is closed.</div></li>
+          <li class="fm-item"><span class="fm-marker">3</span><div class="fm-item-body"><strong>Check it off.</strong> Every circle is a task. The Day is done when every circle on it is done.</div></li>
+          <li class="fm-item"><span class="fm-marker">4</span><div class="fm-item-body"><strong>Yesterday keeps running.</strong> Each new Day adds to the ones before it. Nothing you've installed gets dropped.</div></li>
+          <li class="fm-item"><span class="fm-marker">5</span><div class="fm-item-body"><strong>Check in, unprompted.</strong> Your check-ins are what I coach from, so send them without being asked. We do this over Telegram: when you close a Day, tell me how it went. When a Day asks for a photo, a pick, or an answer, send it there the same day. If something isn't working, say so immediately. That's what I'm here for.</div></li>
+        </ol>
+      </div>
+    </div>
+  </article>
+
+  <!-- DAY 0 -->
+  <article class="fm-unit">
+    <div class="fm-band">
+      <div class="fm-inner">
+        <p class="fm-eyebrow">Day 0 — Get Set Up</p>
+        <h2 class="fm-sechead-title">Three Things Today. Then You Start.</h2>
+        <p class="fm-target">No food changes yet. Today is just tools and picks.</p>
+      </div>
+    </div>
+    <div class="fm-page">
+      <div class="fm-inner">
+        <ol class="fm-list">
+          <li class="fm-item"><span class="fm-marker">1</span><div class="fm-item-body"><strong>The scale.</strong> Buy a <strong>digital kitchen food scale that measures in grams</strong>. Any brand under $20 works. Get it <strong>today</strong> (in-store or same-day). It's the one tool everything else needs.</div></li>
+          <li class="fm-item"><span class="fm-marker">2</span><div class="fm-item-body"><strong>Yogurt recon.</strong> Buy <strong>plain 0% Greek yogurt</strong>, a few different brands. The only filter: the ingredients read <strong>milk + live cultures, nothing else</strong>. No added sugar, no "vanilla," no "honey." Those flavors hide 10–15g of sugar. Send a <strong>photo of each tub's label</strong>.</div></li>
+          <li class="fm-item"><span class="fm-marker">3</span><div class="fm-item-body"><strong>Pick your proteins.</strong> From the list below, tell me your <strong>top 3</strong>: just the three you'd actually eat. It's not exhaustive; if you eat something lean that's missing, say so.</div></li>
+        </ol>
+        <span class="fm-pill">Pick Your Proteins</span>
+        <div class="fm-pill-row">
+          <span class="fm-pill">Tuna / chicken pouch (in water)</span>
+          <span class="fm-pill">Pre-cooked chicken pouch</span>
+          <span class="fm-pill">Frozen grilled chicken strips</span>
+          <span class="fm-pill">Rotisserie chicken</span>
+          <span class="fm-pill">Hard-boiled eggs</span>
+          <span class="fm-pill">Deli turkey breast</span>
+          <span class="fm-pill">Frozen white fish</span>
+          <span class="fm-pill">Frozen salmon</span>
+          <span class="fm-pill">Lean beef (90/10)</span>
+        </div>
+        <p class="fm-specline" style="margin-top:var(--space-8)"><span class="k">Done</span>Scale in hand · yogurt labels sent · top 3 picked</p>
+      </div>
+    </div>
+  </article>
+
+  <!-- DAY 1 -->
+  <article class="fm-unit">
+    <div class="fm-band">
+      <div class="fm-inner">
+        <p class="fm-eyebrow">Day 1 — Water In, Yogurt In</p>
+        <h2 class="fm-sechead-title">Two Easy Installs.</h2>
+      </div>
+    </div>
+    <div class="fm-page">
+      <div class="fm-inner">
+        <ul class="fm-list">
+          <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body"><strong>Every morning from now on.</strong> On waking, drink <strong>2 liters of water, before coffee and before food</strong>. Big bottle, first thing. That's the whole task. (No bottle with a steel or glass interior? Grab a good one today.)</div></li>
+          <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body"><strong>Start the yogurt.</strong> Start eating the yogurt. <strong>Any amount</strong> counts: a spoonful or half a tub. You bought a few brands: find the one you genuinely like. That's the one we build on.</div></li>
+        </ul>
+      </div>
+    </div>
+  </article>
+
+  <!-- DAY 2 -->
+  <article class="fm-unit">
+    <div class="fm-band">
+      <div class="fm-inner">
+        <p class="fm-eyebrow">Day 2 — The Evening Ritual + Your First Meat</p>
+        <h2 class="fm-sechead-title">Tonight, You Prep Tomorrow's First Food.</h2>
+        <p class="fm-target">This is where the structure starts doing the work for you.</p>
+      </div>
+    </div>
+    <div class="fm-page">
+      <div class="fm-inner">
+        <ul class="fm-list">
+          <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body"><strong>The evening ritual · tonight, then every night.</strong> Weigh <strong>one serving of yogurt</strong> (serving size is on the tub) into a container, lid on, into the fridge. That's tomorrow's first food, already waiting. Your day starts itself: wake → water → the yogurt that's sitting there, whenever you start eating.</div></li>
+          <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body"><strong>The meat run · buy, cook, eat today.</strong> From your top 3, <strong>pick one</strong>. Buy enough for the week, prepare it, and eat it. Today. You're in the driver's seat on how it's made: seasoning, sides, your taste. Already-cooked options make this easy. Then send a quick report: a photo, what you picked, how you prepped it, and where you bought it.</div></li>
+        </ul>
+        <div class="fm-callout note">
+          <p class="fm-callout-label">Need Ideas?</p>
+          <p class="fm-callout-body">Recipes, seasonings, cooking methods, easy shortcuts. If you're stuck on any of it, just ask.</p>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- DAY 3 -->
+  <article class="fm-unit">
+    <div class="fm-band">
+      <div class="fm-inner">
+        <p class="fm-eyebrow">Day 3 — Taste Check</p>
+        <h2 class="fm-sechead-title">Does It Actually Taste Good?</h2>
+        <p class="fm-target">A lean meat you only tolerate disappears from your plate by week two, so we fix taste now, before it becomes a problem.</p>
+      </div>
+    </div>
+    <div class="fm-page">
+      <div class="fm-inner">
+        <p>Be honest: <strong>"it was fine" counts as a no.</strong> Three ways this can go:</p>
+        <ul class="fm-list">
+          <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body"><strong>You liked it.</strong> Great, keep it. We can still tune the seasoning if you want.</div></li>
+          <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body"><strong>Close but not there.</strong> Let's make it better: seasoning, a sauce, a different cooking method. Small fixes beat starting over.</div></li>
+          <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body"><strong>Not working.</strong> Swap it for another pick. (Easiest option on the board: pre-cooked chicken breast strips. No prep, hard to get wrong.)</div></li>
+        </ul>
+        <p style="margin-top:var(--space-6)">If you swap, just <strong>repeat the meat run today</strong> with the new pick: buy, cook, eat, report.</p>
+      </div>
+    </div>
+  </article>
+
+  <!-- DAY 4 -->
+  <article class="fm-unit">
+    <div class="fm-band">
+      <div class="fm-inner">
+        <p class="fm-eyebrow">Day 4 — Portion The Meat</p>
+        <h2 class="fm-sechead-title">The Ritual Grows One Step.</h2>
+        <p class="fm-target">One thing worth knowing: meat is mostly water, so grams on the scale isn't grams of protein. You don't need the math, just a portion size.</p>
+      </div>
+    </div>
+    <div class="fm-page">
+      <div class="fm-inner">
+        <ul class="fm-list">
+          <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body"><strong>Tonight, then every night.</strong> After the yogurt, weigh out <strong>one portion of your cooked meat</strong> and add it to the fridge, ready to grab tomorrow. Scale tip: put the empty container on, hit <strong>tare/zero</strong>, then add the food so the scale reads just the meat.</div></li>
+        </ul>
+        <span class="fm-pill">Portion Reference</span>
+        <div class="fm-table-wrap">
+          <table class="fm-table">
+            <thead><tr><th>Your protein</th><th class="num">One good portion</th></tr></thead>
+            <tbody>
+              <tr><td>Chicken / turkey breast, rotisserie (skin off)</td><td class="num">70–140 g</td></tr>
+              <tr><td>White fish (cod / tilapia / pollock)</td><td class="num">90–170 g</td></tr>
+              <tr><td>Salmon</td><td class="num">80–160 g</td></tr>
+              <tr><td>Lean beef (90/10)</td><td class="num">80–150 g</td></tr>
+              <tr><td>Tuna / chicken pouch or can</td><td class="num">1 pouch</td></tr>
+              <tr><td>Frozen grilled strips / deli turkey</td><td class="num">use the label</td></tr>
+              <tr><td>Hard-boiled eggs</td><td class="num">4–6 eggs</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="fm-caption">Find your pick and weigh out about one portion per meal. Once your food is locked in, I'll give you one exact number for it.</p>
+        <div class="fm-callout">
+          <p class="fm-callout-label">⚠ The One Strict Rule</p>
+          <p class="fm-callout-body">Your prepped food is always the <strong>first food you eat each day</strong>. Water first, then the containers, before anything else. Be strict about this one. Everything you eat <em>after</em> it is still completely yours.</p>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- DAY 5 -->
+  <article class="fm-unit">
+    <div class="fm-band">
+      <div class="fm-inner">
+        <p class="fm-eyebrow">Day 5 — A Vegetable Joins The Stack</p>
+        <h2 class="fm-sechead-title">The One Food That Makes Everything After It Easier.</h2>
+      </div>
+    </div>
+    <div class="fm-page">
+      <div class="fm-inner">
+        <ol class="fm-list">
+          <li class="fm-item"><span class="fm-marker">1</span><div class="fm-item-body"><strong>First, a quick check.</strong> Is broccoli a hard no? If so, tell me before you buy and we'll pick something else. Same frozen steam-in-bag category, same task. No point installing a food you've already decided against.</div></li>
+          <li class="fm-item"><span class="fm-marker">2</span><div class="fm-item-body"><strong>Then, buy it, learn it, stack it.</strong> Grab <strong>frozen steam-in-bag</strong> vegetables, taste it today, and tonight add a serving to the prep, alongside the yogurt and the meat. Three containers now.</div></li>
+        </ol>
+        <div class="fm-compare">
+          <div>
+            <span class="fm-pill">Flavor Freely</span>
+            <ul class="fm-list">
+              <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body">Salt, pepper, spices</div></li>
+              <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body">Hot sauce, mustard, lemon</div></li>
+              <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body">Light garlic-herb seasoning</div></li>
+              <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body">Anything near-zero-calorie</div></li>
+            </ul>
+          </div>
+          <div>
+            <span class="fm-pill" style="background:var(--page-text)">Skip These</span>
+            <ul class="fm-list">
+              <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body">Cheese sauce</div></li>
+              <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body">Butter &amp; cream sauces</div></li>
+              <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body">Sugary marinades / glazes</div></li>
+              <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body">"Mac &amp;" anything</div></li>
+            </ul>
+          </div>
+        </div>
+        <div class="fm-callout note">
+          <p class="fm-callout-label">Note</p>
+          <p class="fm-callout-body">Seasoning yes, sauce no — a cheese-sauce bag can double the calories of the vegetable it coats.</p>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- DAY 6 -->
+  <article class="fm-unit">
+    <div class="fm-band">
+      <div class="fm-inner">
+        <p class="fm-eyebrow">Day 6 — Catch Up + A Couple Questions</p>
+        <h2 class="fm-sechead-title">A Breather, And A Look Ahead.</h2>
+        <p class="fm-target">Five days of stacking earns a day to close loose ends. Nothing new lands today.</p>
+      </div>
+    </div>
+    <div class="fm-page">
+      <div class="fm-inner">
+        <p>Anything from Day 0–5 that's still open, we finish. If something isn't clicking (a meat that's stalling, a step that keeps slipping), we talk it through and fix it.</p>
+        <span class="fm-pill" style="margin-top:var(--space-6); display:inline-block">Three Quick Things For Later</span>
+        <ol class="fm-list">
+          <li class="fm-item"><span class="fm-marker">1</span><div class="fm-item-body">Roughly what time is the <strong>earliest</strong> you start eating, and the <strong>latest</strong> you'd ever start?</div></li>
+          <li class="fm-item"><span class="fm-marker">2</span><div class="fm-item-body">From these carbs, which would you <strong>actually eat</strong>? (The list isn't exhaustive, so tell me if a favorite's missing.)</div></li>
+          <li class="fm-item"><span class="fm-marker">3</span><div class="fm-item-body">Accurate number, not the ideal one: how many bottles of water are you actually getting through in a day, morning included?</div></li>
+        </ol>
+        <span class="fm-pill" style="margin-top:var(--space-8); display:inline-block">Your Carb Options</span>
+        <div class="fm-pill-row">
+          <span class="fm-pill">White / brown rice</span>
+          <span class="fm-pill">Potatoes</span>
+          <span class="fm-pill">Sweet potatoes</span>
+          <span class="fm-pill">Oats</span>
+          <span class="fm-pill">Quinoa</span>
+          <span class="fm-pill">Beans / lentils</span>
+          <span class="fm-pill">Fruit</span>
+          <span class="fm-pill">Corn tortillas</span>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- DAY 7 -->
+  <article class="fm-unit">
+    <div class="fm-band">
+      <div class="fm-inner">
+        <p class="fm-eyebrow">Day 7 — Week One, Done</p>
+        <h2 class="fm-sechead-title">One Week In. Your Morning Is Owned.</h2>
+        <p class="fm-target">One week in, and you built it: three foods adopted, a ritual running nightly. One small move closes the week.</p>
+      </div>
+    </div>
+    <div class="fm-page">
+      <div class="fm-inner">
+        <ul class="fm-list">
+          <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body"><strong>Your first carb.</strong> From your list, we start with one pick. Buy enough for the week, and tonight add a serving to the prep, alongside the yogurt, meat, and vegetable. <strong>Four containers now.</strong></div></li>
+          <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body"><strong>Every meal, from now on.</strong> Send a photo of every meal you eat, starting today. Prepped or not, on-plan or off: if you eat it, snap it before or as you go. This is how I actually see what's happening and coach it, day to day.</div></li>
+        </ul>
+        <p class="fm-specline" style="margin-top:var(--space-8)"><span class="k">The Board</span>Prepped food first → prep tomorrow tonight → photo every meal.</p>
+      </div>
+    </div>
+  </article>
+
+  <!-- MILESTONE -->
+  <article class="fm-unit">
+    <div class="fm-band">
+      <div class="fm-inner">
+        <p class="fm-eyebrow">🎉 Milestone</p>
+        <h2 class="fm-sechead-title">You Built A Whole System In A Week. 🔥</h2>
+        <p class="fm-target">Wake time, 2 liters of water, prepped containers, a ritual running every night. You built it, ran it daily, and it held. That's the hard part, done.</p>
+      </div>
+    </div>
+    <div class="fm-page">
+      <div class="fm-inner">
+        <p class="fm-specline"><span class="k">Assignment</span>Enjoy it. 🏆</p>
+      </div>
+    </div>
+  </article>
+
+  <!-- WEEKS 2-4 -->
+  <article class="fm-unit">
+    <div class="fm-band">
+      <div class="fm-inner">
+        <p class="fm-eyebrow">Weeks 2–4 — It Keeps Running</p>
+        <h2 class="fm-sechead-title">Same Routine, Small Changes.</h2>
+        <p class="fm-target">The routine you built in week one is the whole engine. From here it just gets fine-tuned. This is what a day looks like, every day.</p>
+      </div>
+    </div>
+    <div class="fm-page">
+      <div class="fm-inner">
+        <span class="fm-pill">Morning</span>
+        <ul class="fm-list">
+          <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body">Hold your start time, nothing before it</div></li>
+          <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body">2 liters of water on waking</div></li>
+          <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body">Your prepped containers before anything else: yogurt, protein, vegetable, carb</div></li>
+        </ul>
+        <span class="fm-pill" style="margin-top:var(--space-8); display:inline-block">Through The Day</span>
+        <ul class="fm-list">
+          <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body">Your water bottles, spread out</div></li>
+          <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body">After the prepped food, the rest of your eating is still yours</div></li>
+        </ul>
+        <span class="fm-pill" style="margin-top:var(--space-8); display:inline-block">Evening</span>
+        <ul class="fm-list">
+          <li class="fm-item"><span class="fm-marker">&rsaquo;</span><div class="fm-item-body">Prep tomorrow's containers: same ritual, every night</div></li>
+        </ul>
+        <div class="fm-callout note">
+          <p class="fm-callout-label">What's Next</p>
+          <p class="fm-callout-body">Weeks 2–4 are personalized to you. I'll add <strong>one small change at a time</strong>, based on how your check-ins go: a bit more protein, a portion tweak, a longer morning window, some daily walking. Nothing to memorize now; you'll get each step when it's your turn. And tell me how you're feeling. That's the most useful thing you can report.</p>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 11 FOOTER META LINE -->
+  <div class="fm-footer"><span>30-Day Fat Loss · Daily Protocol</span><span>Start Today</span></div>
+
+</body>
+</html>

@@ -1,0 +1,144 @@
+/* =====================================================================
+   FIELD MANUAL ("Recon") — PRINT STYLESHEET
+   Paginated US-Letter output via Paged.js. Sheet-agnostic: reads only
+   Field Manual tokens + component classes (fm-*), same convention as
+   burn-guide/print.css.
+
+   Injected into a temporary copy of a sheet by build-pdf.sh at
+   conversion time. NEVER link this from a screen sheet — the screen
+   HTML stays a single scrolling page.
+   Rules are unwrapped (no @media print): Paged.js paginates in screen
+   media, and this file only ever exists in the injected copy.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   0. Emoji fix (print only). Chrome's PDF export drops Apple Color
+   Emoji glyphs from bold text (space reserved, glyph unpainted) — it
+   can't fake-bold the bitmap font. Aliasing the local emoji font with
+   a full weight range disables bold synthesis, so emoji paint at any
+   weight (the Milestone unit's 🎉 / 🔥 / 🏆). Same fix as burn-guide.
+   --------------------------------------------------------------------- */
+@font-face {
+  font-family: 'Emoji Flat';
+  src: local('Apple Color Emoji');
+  font-weight: 100 900;
+}
+
+:root {
+  --font-display: 'Inter', system-ui, -apple-system, sans-serif, 'Emoji Flat';
+  --font-mono:    'Space Mono', ui-monospace, 'IBM Plex Mono', monospace, 'Emoji Flat';
+}
+
+/* ---------------------------------------------------------------------
+   1. Page geometry + running furniture
+   Doc title comes from the banner's left span; the current section
+   name comes from each unit's .fm-eyebrow (short label — the h2 titles
+   are full sentences, unusable as running furniture — same call Burn
+   made for this sheet).
+   --------------------------------------------------------------------- */
+.fm-banner span:first-child { string-set: doctitle content(); }
+.fm-eyebrow                 { string-set: section   content(); }
+
+@page {
+  size: letter;
+  margin: 0.5in;
+  @top-left     { content: string(doctitle); }
+  @top-right    { content: string(section); }
+  @bottom-left  { content: "30-Day Fat Loss · Daily Protocol"; }
+  @bottom-right { content: "Page " counter(page); }
+}
+
+/* Cover: no furniture */
+@page :first {
+  @top-left     { content: none; }
+  @top-right    { content: none; }
+  @bottom-left  { content: none; }
+  @bottom-right { content: none; }
+}
+
+/* Margin-box skin: the FM meta voice — mono, muted, wide-tracked */
+.pagedjs_margin-top-left,
+.pagedjs_margin-top-right,
+.pagedjs_margin-bottom-left,
+.pagedjs_margin-bottom-right {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-label);
+  color: var(--band-mute);
+}
+
+/* ---------------------------------------------------------------------
+   2. Surfaces on paper. Unlike Burn (one dark theme needing a page-wide
+   background hack), each .fm-band / .fm-page div already paints its own
+   background on screen — that carries straight into print. Only need
+   color-adjust so the navy bands and amber pills aren't stripped.
+   --------------------------------------------------------------------- */
+* {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.pagedjs_page { background: var(--page-bg); }
+
+/* ---------------------------------------------------------------------
+   3. Pagination — cover pages, then one unit (band + page body) per sheet.
+
+   .fm-cover (banner + hero + index cards) is assigned its own named page
+   context via the `page` property (CSS GCPM), not just `@page :first` —
+   the index cards don't fit alongside the hero on one sheet, so the
+   cover spans two pages and *both* need blank furniture, not only the
+   very first physical page in the document.
+   --------------------------------------------------------------------- */
+.fm-cover, .fm-cover * { page: cover; }
+
+@page cover {
+  margin: 0.5in;
+  @top-left     { content: none; }
+  @top-right    { content: none; }
+  @bottom-left  { content: none; }
+  @bottom-right { content: none; }
+}
+
+.fm-cover { break-after: page; }
+
+/* Hero is the visual centerpiece of the cover — owns its own sheet,
+   vertically centered; the index cards flow onto the next. */
+.fm-hero-band {
+  break-after: page;
+  min-height: 9.4in;                /* fills the 10in content area */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Every day/section unit starts a fresh sheet; its band + page body
+   stay glued together (this is the wrapper's whole reason to exist). */
+.fm-unit {
+  break-before: page;
+  break-inside: avoid-page;
+}
+
+/* Page numbering starts at the first real content page */
+.fm-cover + .fm-unit { counter-reset: page 1; }
+
+/* ---------------------------------------------------------------------
+   4. Per-component break rules
+   --------------------------------------------------------------------- */
+
+/* Section openers never orphaned at a page bottom */
+.fm-eyebrow, .fm-sechead-title, .fm-target { break-after: avoid; }
+
+/* Keep-together units — everything that reads as a single block */
+.fm-index, .fm-pill-row, .fm-compare, .fm-callout,
+.fm-item, .fm-index-card, .fm-specline-group {
+  break-inside: avoid;
+}
+
+/* Data Table — the one component allowed to span pages */
+.fm-table { break-inside: auto; }
+.fm-table thead { display: table-header-group; }   /* header repeats per page */
+.fm-table tr { break-inside: avoid; }
+
+/* Footer Meta Line closes the last page; running footer carries the
+   per-page furniture (§1), so no break rule needed here. */
