@@ -1,0 +1,135 @@
+/* =====================================================================
+   BURN — PRINT STYLESHEET (PAGE_FORMAT.md)
+   Paginated US-Letter output via Paged.js. Sheet-agnostic: reads only
+   Burn tokens + component classes.
+
+   Injected into a temporary copy of a sheet by build-pdf.sh at
+   conversion time. NEVER link this from a screen sheet — the screen
+   HTML stays a single scrolling page (PAGE_FORMAT.md, scope note).
+   Rules are unwrapped (no @media print): Paged.js paginates in screen
+   media, and this file only ever exists in the injected copy.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   0. Emoji fix (print only). Chrome's PDF export drops Apple Color
+   Emoji glyphs from bold text (space reserved, glyph unpainted) — it
+   can't fake-bold the bitmap font. Aliasing the local emoji font with
+   a full weight range disables bold synthesis, so emoji paint at any
+   weight. The trio and its roles are unchanged — this only covers
+   glyphs the trio lacks.
+   --------------------------------------------------------------------- */
+@font-face {
+  font-family: 'Emoji Flat';
+  src: local('Apple Color Emoji');
+  font-weight: 100 900;
+}
+
+:root {
+  --font-display:   'Space Grotesk', system-ui, sans-serif, 'Emoji Flat';
+  --font-mono:      'IBM Plex Mono', ui-monospace, monospace, 'Emoji Flat';
+  --font-editorial: 'Source Serif 4', Georgia, serif, 'Emoji Flat';
+}
+
+/* ---------------------------------------------------------------------
+   1. Page geometry + running furniture (PAGE_FORMAT §3–§4)
+   The doc title comes from the hero's .tag text; the current section
+   name comes from each section's .eyebrow (short label — this sheet's
+   H2s are full sentences, unusable as running furniture).
+   --------------------------------------------------------------------- */
+.tag     { string-set: doctitle content(text); }
+.eyebrow { string-set: section  content(text); }
+
+@page {
+  size: letter;            /* 8.5 × 11 in, portrait */
+  margin: 0.5in;
+  @top-left     { content: string(doctitle); }
+  @top-right    { content: string(section); }
+  @bottom-left  { content: string(doctitle); }
+  @bottom-right { content: "Page " counter(page); }
+}
+
+/* Cover: no furniture (§4.1) */
+@page :first {
+  @top-left     { content: none; }
+  @top-right    { content: none; }
+  @bottom-left  { content: none; }
+  @bottom-right { content: none; }
+}
+
+/* Margin-box skin: Burn eyebrow voice — mono, muted, wide-tracked */
+.pagedjs_margin-top-left,
+.pagedjs_margin-top-right,
+.pagedjs_margin-bottom-left,
+.pagedjs_margin-bottom-right {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-label);
+  color: var(--text-mute);
+}
+
+/* ---------------------------------------------------------------------
+   2. Dark theme on paper (§3 note) — full-bleed page background, and
+   the signature dot-grid reattached per page (the fixed body::before
+   can't tile across sheets; §6 note allows per-page reattachment).
+   --------------------------------------------------------------------- */
+* {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.pagedjs_page {
+  background: var(--bg);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+body { background: transparent; }
+body::before { display: none; }   /* fixed dot-grid off; per-page above */
+
+/* ---------------------------------------------------------------------
+   3. Section pagination — one section per sheet. The page edge now
+   separates sections, so the 1px --line separators drop (§3).
+   --------------------------------------------------------------------- */
+section, .section {
+  break-before: page;
+  border-bottom: none;
+  padding: 0;
+}
+
+/* Cover: the hero section owns page 1, content vertically centered */
+section:has(.hero) {
+  break-before: auto;
+  break-after: page;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 9.4in;               /* fills the 10in content area */
+}
+
+/* Page numbering starts at the first content page (§4.3) */
+section:has(.hero) + section { counter-reset: page 1; }
+
+/* ---------------------------------------------------------------------
+   4. Per-component break rules (§5)
+   --------------------------------------------------------------------- */
+
+/* Section openers never orphaned at a page bottom */
+.eyebrow, h2, .lead { break-after: avoid; }
+
+/* Keep-together units — everything that reads as a single block */
+.statline, .macro-grid, .calc-box, .compare-grid, .arrow-note,
+.schedule, .callout, .tl-item, .chip, .task, .body p {
+  break-inside: avoid;
+}
+
+/* Data Table — the one component allowed to span pages */
+table { break-inside: auto; }
+thead { display: table-header-group; }   /* header repeats per page */
+tr { break-inside: avoid; }
+tr.totals { break-before: avoid; }       /* totals stay with their rows */
+
+/* Standalone closing line sits on the last page (§5 #13) */
+footer { padding: 32px 0 0; }
