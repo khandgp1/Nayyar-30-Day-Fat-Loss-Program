@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>30-Day Fat Loss · Coach's Playbook</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap');
+
+  /* =====================================================================
+     DESIGN TOKENS  —  from burn-guide/tokens.css (LOCKED + "Burn" THEME)
+     ===================================================================== */
+  :root{
+    /* LOCKED — fonts */
+    --font-display:   'Space Grotesk', system-ui, sans-serif;
+    --font-mono:      'IBM Plex Mono', ui-monospace, monospace;
+    --font-editorial: 'Source Serif 4', Georgia, serif;
+    /* LOCKED — layout */
+    --maxw: 860px;
+    --gutter: 24px;
+    /* LOCKED — spacing */
+    --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+    --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-12: 48px;
+    --space-14: 56px; --space-18: 72px;
+    /* LOCKED — radii */
+    --radius-sm: 8px; --radius: 10px; --radius-pill: 999px;
+    --border-w: 1px;
+    /* LOCKED — type scale */
+    --fs-h1: clamp(2.4rem, 6vw, 4.2rem);
+    --fs-h2: clamp(1.6rem, 4vw, 2.2rem);
+    --fs-lead: 1.02rem;
+    --fs-label: 11px;
+    --fs-eyebrow: 12px;
+    --fs-data: 1.5rem;
+    --lh-body: 1.55;
+    /* LOCKED — letter-spacing */
+    --ls-label: 0.1em; --ls-eyebrow: 0.18em; --ls-tight: -0.02em;
+  }
+  :root{
+    /* THEME — "Burn" */
+    --bg: #101411; --bg-soft: #161b17; --card: #1b211c; --line: #2c352e;
+    --text: #e9ece7; --text-dim: #93a193; --text-mute: #5e6b60;
+    --accent-effort: #ff6a45; --accent-effort-dim: #6b3527;
+    --accent-recover: #6be3c4; --accent-recover-dim: #2c4f47;
+    --accent-warn: #f0c75e;
+    --grid-line: rgba(255,255,255,0.018);
+  }
+
+  /* =====================================================================
+     BASE + SHELL
+     ===================================================================== */
+  *{ box-sizing: border-box; margin:0; padding:0; }
+  html{ scroll-behavior: smooth; }
+  body{
+    background: var(--bg); color: var(--text);
+    font-family: var(--font-display); line-height: var(--lh-body);
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before{
+    content:""; position: fixed; inset:0;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 48px 48px; pointer-events: none; z-index: 0;
+  }
+  .wrap{ max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); position: relative; z-index: 1; }
+
+  .section{ padding: 52px 0; border-bottom: 1px solid var(--line); }
+  .section:last-of-type{ border-bottom: none; }
+
+  .body{ margin-top: 22px; max-width: 660px; }
+  .body p{ color: var(--text-dim); font-size: var(--fs-lead); margin-bottom: 14px; }
+  .body p:last-child{ margin-bottom: 0; }
+  .body strong{ color: var(--text); font-weight: 600; }
+  .kick{ font-family: var(--font-mono); font-size: var(--fs-label); text-transform: uppercase; letter-spacing: var(--ls-label); color: var(--text-mute); display:block; margin-bottom: 4px; }
+  .exit{ font-family: var(--font-mono); font-size: 12px; color: var(--text-mute); margin-top: 26px; letter-spacing: 0.03em; }
+  .exit b{ color: var(--accent-recover); font-weight: 600; }
+  .caption{ font-family: var(--font-mono); font-size: 11px; color: var(--text-mute); letter-spacing: 0.04em; margin-top: 12px; }
+
+  /* =====================================================================
+     COMPONENTS  —  from burn-guide/components.html (verbatim styles)
+     ===================================================================== */
+
+  /* 01 HERO */
+  .tag{ font-family: var(--font-mono); font-size: var(--fs-eyebrow); letter-spacing: var(--ls-eyebrow); text-transform: uppercase; color: var(--accent-effort); margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+  .tag::before{ content:""; width: 8px; height: 8px; background: var(--accent-effort); border-radius: 50%; display:inline-block; box-shadow: 0 0 0 4px var(--accent-effort-dim); }
+  .hero h1{ font-size: var(--fs-h1); font-weight: 700; letter-spacing: var(--ls-tight); line-height: 1.04; margin-bottom: 24px; }
+  .hero h1 em{ font-style: normal; color: var(--accent-effort); }
+  .hero-sub{ font-family: var(--font-editorial); font-style: italic; font-size: 1.15rem; color: var(--text-dim); max-width: 620px; margin-bottom: 36px; }
+
+  /* 02 STATLINE */
+  .statline{ display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .statline .stat{ padding: 16px 14px; border-right: 1px solid var(--line); }
+  .statline .stat:last-child{ border-right: none; }
+  .stat-step{ font-family: var(--font-mono); font-size: var(--fs-label); text-transform: uppercase; letter-spacing: var(--ls-label); color: var(--text-mute); }
+  .stat-act{ font-weight: 600; font-size: 0.98rem; color: var(--text); margin-top: 6px; }
+
+  /* 03 SECTION HEADER */
+  .eyebrow{ font-family: var(--font-mono); font-size: var(--fs-eyebrow); letter-spacing: var(--ls-eyebrow); text-transform: uppercase; color: var(--text-mute); margin-bottom: 12px; }
+  h2{ font-size: var(--fs-h2); font-weight: 600; letter-spacing: -0.01em; margin-bottom: 18px; }
+  p.lead{ font-family: var(--font-editorial); font-style: italic; color: var(--text-dim); max-width: 640px; font-size: 1.05rem; }
+
+  /* 05 CALC BOX */
+  .calc-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+  .calc-box{ border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 22px; background: var(--bg-soft); }
+  .calc-box.primary{ border-color: var(--accent-effort-dim); }
+  .calc-label{ font-family: var(--font-mono); font-size: var(--fs-label); text-transform: uppercase; letter-spacing: var(--ls-label); color: var(--text-mute); margin-bottom: 10px; }
+  .calc-box.primary .calc-label{ color: var(--accent-effort); }
+  .calc-value{ font-family: var(--font-mono); font-size: var(--fs-data); color: var(--text); font-weight: 600; }
+  .calc-deriv{ font-family: var(--font-mono); font-size: 12px; color: var(--text-mute); margin-top: 8px; }
+
+  /* 06 DATA TABLE */
+  table{ width: 100%; border-collapse: collapse; margin-top: 24px; font-size: 0.95rem; }
+  th{ text-align: left; font-family: var(--font-mono); font-size: var(--fs-label); text-transform: uppercase; letter-spacing: var(--ls-label); color: var(--text-mute); padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  td{ padding: 12px; border-bottom: 1px solid var(--line); color: var(--text-dim); }
+  tr:last-child td{ border-bottom: none; }
+  td.num, th.num{ font-family: var(--font-mono); text-align: right; color: var(--text); }
+
+  /* 08 TWO-CARD COMPARE */
+  .compare-grid{ display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 28px; }
+  .c-card{ border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+  .c-card h3{ font-family: var(--font-mono); font-size: 13px; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 14px; }
+  .c-card.positive h3{ color: var(--accent-recover); }
+  .c-card.negative h3{ color: var(--accent-effort); }
+  .c-card ul{ list-style: none; }
+  .c-card li{ padding: 7px 0; border-bottom: 1px solid var(--line); color: var(--text-dim); font-size: 0.94rem; }
+  .c-card li:last-child{ border-bottom: none; }
+  .arrow-note{ margin-top: 18px; font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-mute); padding: 14px 16px; background: var(--bg-soft); border-radius: var(--radius-sm); border: 1px solid var(--line); }
+  .arrow-note .target{ color: var(--text); }
+
+  /* 10 TIMELINE */
+  .timeline{ margin-top: 28px; border-left: 1px solid var(--line); padding-left: 28px; }
+  .tl-item{ position: relative; padding-bottom: 32px; }
+  .tl-item:last-child{ padding-bottom: 0; }
+  .tl-item::before{ content:""; position: absolute; left: -33px; top: 4px; width: 9px; height: 9px; background: var(--bg); border: 2px solid var(--accent-effort); border-radius: 50%; }
+  .tl-stage{ font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: var(--ls-label); color: var(--accent-effort); margin-bottom: 8px; }
+  .tl-item ul{ list-style: none; margin-top: 6px; }
+  .tl-item li{ color: var(--text-dim); padding: 4px 0; font-size: 0.95rem; }
+  .tl-item li::before{ content: "— "; color: var(--text-mute); }
+
+  /* 11 CALLOUT */
+  .callout{ margin-top: 28px; border: 1px solid var(--line); border-left: 3px solid var(--accent-warn); border-radius: var(--radius-sm); padding: 20px 22px; background: var(--bg-soft); }
+  .callout .c-label{ font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent-warn); margin-bottom: 8px; }
+  .callout p{ color: var(--text-dim); font-size: 0.95rem; margin-bottom: 8px; }
+  .callout p:last-child{ margin-bottom: 0; }
+  .callout strong{ color: var(--text); }
+
+  /* 12 CHIP LIST */
+  .chip-list{ display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+  .chip{ font-family: var(--font-mono); font-size: 13px; padding: 7px 14px; border: 1px solid var(--line); border-radius: var(--radius-pill); color: var(--text-dim); }
+
+  /* 13 FOOTER */
+  footer{ padding: 48px 0 80px; font-family: var(--font-mono); font-size: 12px; color: var(--text-mute); letter-spacing: 0.04em; }
+
+  /* =====================================================================
+     COACH-EDITION COMPONENTS  —  the two-lane grammar + lever board
+     ===================================================================== */
+
+  /* Two-lane task block: SEND lane (recover) + COACH lane (effort) */
+  .duo{ margin-top: 28px; }
+  .duo-kick{ font-family: var(--font-mono); font-size: var(--fs-label); text-transform: uppercase; letter-spacing: var(--ls-label); color: var(--text); display:block; margin-bottom: 10px; }
+  .lane{ border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 18px 20px; background: var(--bg-soft); }
+  .lane + .lane{ margin-top: 8px; }
+  .lane.send{ border-left: 3px solid var(--accent-recover); }
+  .lane.coach{ border-left: 3px solid var(--accent-effort); background: var(--card); }
+  .lane-label{ font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 10px; }
+  .lane.send .lane-label{ color: var(--accent-recover); }
+  .lane.coach .lane-label{ color: var(--accent-effort); }
+  .lane p{ color: var(--text-dim); font-size: 0.96rem; margin-bottom: 10px; }
+  .lane p:last-child, .lane ul:last-child, .lane ol:last-child{ margin-bottom: 0; }
+  .lane strong{ color: var(--text); font-weight: 600; }
+  .lane ul, .lane ol{ margin: 0 0 10px 0; padding-left: 20px; }
+  .lane li{ color: var(--text-dim); font-size: 0.96rem; padding: 3px 0; }
+  .lane .chip-list{ margin-top: 12px; }
+
+  /* Keyed rows inside the coach lane: DONE BAR / WHY / WATCH … */
+  .crow{ display: grid; grid-template-columns: 96px 1fr; gap: 14px; padding: 7px 0; border-bottom: 1px solid var(--line); }
+  .crow:last-child{ border-bottom: none; }
+  .crow .k{ font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-mute); padding-top: 3px; }
+  .crow .v{ color: var(--text-dim); font-size: 0.95rem; }
+  .crow .v strong{ color: var(--text); }
+  .crow.gate .k{ color: var(--accent-warn); }
+
+  /* Lever board */
+  .lever-grid{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; }
+  .lever{ border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; background: var(--bg-soft); }
+  .lever-num{ font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; color: var(--accent-effort); margin-bottom: 8px; }
+  .lever-name{ font-weight: 600; font-size: 0.98rem; color: var(--text); margin-bottom: 6px; }
+  .lever-what{ font-size: 0.86rem; color: var(--text-dim); margin-bottom: 10px; }
+  .lever-gate{ font-family: var(--font-mono); font-size: 11px; color: var(--accent-warn); letter-spacing: 0.03em; }
+  .lever-gate::before{ content:"GATE · "; color: var(--text-mute); }
+
+  /* Lever deep-dive header */
+  .lever-sec{ margin-top: 44px; }
+  .lever-sec h3{ font-size: 1.25rem; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 6px; }
+  .lever-sec h3 .ln{ font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.12em; color: var(--accent-effort); margin-right: 10px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 720px){
+    .statline{ grid-template-columns: repeat(2, 1fr); }
+    .statline .stat:nth-child(2){ border-right: none; }
+    .compare-grid, .calc-grid{ grid-template-columns: 1fr; }
+    .lever-grid{ grid-template-columns: 1fr 1fr; }
+    table{ font-size: 0.82rem; }
+    th, td{ padding: 8px 6px; }
+    .crow{ grid-template-columns: 78px 1fr; gap: 10px; }
+  }
+  @media (max-width: 480px){
+    .lever-grid{ grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce){ *{ transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO + STATLINE -->
+  <section class="section">
+    <div class="hero">
+      <div class="tag">30-Day Fat Loss · Coach Edition</div>
+      <h1>The Coach's <em>Playbook</em>.</h1>
+      <p class="hero-sub">He receives one adjustment at a time. This is the machinery behind every one of them — and none of it is ever disclosed.</p>
+    </div>
+    <div class="statline">
+      <div class="stat"><div class="stat-step">Days 0–7</div><div class="stat-act">Scripted, rung by rung</div></div>
+      <div class="stat"><div class="stat-step">Days 8–30</div><div class="stat-act">Nine levers, read-driven</div></div>
+      <div class="stat"><div class="stat-step">Per adjustment</div><div class="stat-act">One lever, never two</div></div>
+      <div class="stat"><div class="stat-step">Numbers</div><div class="stat-act">Coach-side, always</div></div>
+    </div>
+    <div class="callout">
+      <div class="c-label">Coach-side only</div>
+      <p>This document never reaches the client. He has his own manual; it contains none of the reasoning below. If a page has to be shared, it's that one — never this one.</p>
+    </div>
+  </section>
+
+  <!-- 00 HOW TO RUN THIS DOCUMENT -->
+  <section class="section">
+    <div class="eyebrow">00 — How to run this document</div>
+    <h2>Two lanes. One rule about which lane he sees.</h2>
+    <p class="lead">Every task below is split into what goes out and what stays here.</p>
+    <div class="duo">
+      <div class="lane send">
+        <div class="lane-label">Send to client</div>
+        <p>Wire-ready copy. Paraphrase freely to match your chat voice, but the <strong>content is fixed</strong> — every bolded constraint in a send block is load-bearing.</p>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side · never disclosed</div>
+        <p>Done bars, gates, and the reason each rung exists. None of it is a secret because it's embarrassing — it's undisclosed because <strong>disclosure invites gaming</strong> (the Day 6 interview) or turns a habit into a lecture (the morning water).</p>
+      </div>
+    </div>
+    <div class="body">
+      <p><span class="kick">The standing doctrine</span>Four principles run under every rung. When improvising, check the improvisation against these:</p>
+      <p><span class="kick">1 · Ownership is adherence</span>The client picks, the menu pre-screens. A food he chose survives week two; a food he was assigned doesn't. Any time you can hand him the choice inside a screened list, do.</p>
+      <p><span class="kick">2 · Swap, don't force</span>Any food that stalls gets swapped within its category, at any point, without resetting anything. Pick changes; method never does. A swap is signal, not failure.</p>
+      <p><span class="kick">3 · Addition before subtraction</span>Week one bans nothing. The program occupies territory by addition, ordering, and formalizing his own habits back at him. Subtraction only lands on a client who is already full.</p>
+      <p><span class="kick">4 · Numbers stay coach-side</span>Calories, deficits, the word "PSMF," the fasting endgame — none of it is disclosed. He receives food-level instructions only.</p>
+    </div>
+  </section>
+
+  <!-- DAY 0 -->
+  <section class="section">
+    <div class="eyebrow">Day 0 — Tooling &amp; inventory</div>
+    <h2>Three tasks. All completable today. Then Day 1.</h2>
+    <p class="lead">Day-zero client, paid, no warm-up phase. Presumption: task completion is taken seriously — every task is one-day-sized and evidence-backed where it matters.</p>
+
+    <div class="duo">
+      <span class="duo-kick">Task 1 · The food scale — today, immediacy first</span>
+      <div class="lane send">
+        <div class="lane-label">Send to client</div>
+        <ul>
+          <li>Digital <strong>kitchen food scale</strong> — not a bathroom scale</li>
+          <li>Measures in <strong>grams</strong></li>
+          <li>Any brand, <strong>under $20</strong></li>
+          <li><strong>Get it today.</strong> In-store or same-day delivery. If a delivery option says Thursday, go to a store instead.</li>
+        </ul>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Done bar</div><div class="v">Scale in hand today. No evidence required — it proves itself the first time he logs food.</div></div>
+        <div class="crow"><div class="k">Why</div><div class="v">The scale is the <strong>gating tool for everything after Day 0</strong>. No scale = the program can't start. That's why immediacy outranks brand, price, and features.</div></div>
+      </div>
+    </div>
+
+    <div class="duo">
+      <span class="duo-kick">Task 2 · Yogurt recon — today or tomorrow</span>
+      <div class="lane send">
+        <div class="lane-label">Send to client</div>
+        <ul>
+          <li>Buy <strong>plain 0% Greek yogurt</strong> — several different brands.</li>
+          <li>The filter: the ingredient list must read <strong>milk + live cultures only</strong>. No added sugar, no "vanilla," no "honey" — those are imposters hiding 10–15g of sugar per serving.</li>
+          <li><strong>Send a photo of each tub, including its ingredient label.</strong> Every brand you buy — tub + label.</li>
+        </ul>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Done bar</div><div class="v">Photos received, every label passes the filter.</div></div>
+        <div class="crow"><div class="k">Why</div><div class="v">The <strong>label photo is the point, not the tub</strong> — it proves he executed the filter and trains label-reading as a day-zero reflex. Multiple brands now means he locks the one he genuinely likes later; adherence lives in the brand he'd eat anyway.</div></div>
+        <div class="crow"><div class="k">If it fails</div><div class="v">A failed label carries no penalty — flag it, he swaps it on the next trip. The reflex is what's being installed.</div></div>
+      </div>
+    </div>
+
+    <div class="duo">
+      <span class="duo-kick">Task 3 · Pick your proteins — today, just a reply</span>
+      <div class="lane send">
+        <div class="lane-label">Send to client</div>
+        <p>The menu — make clear it is <strong>not exhaustive</strong>; if he eats something lean that isn't listed, he says so. Ask: <strong>pick your top 3.</strong> No ranking, no commitment — just the three he'd actually eat.</p>
+        <div class="chip-list">
+          <span class="chip">Tuna / chicken pouch or can, in water</span>
+          <span class="chip">Pre-cooked chicken pouch</span>
+          <span class="chip">Frozen grilled chicken strips</span>
+          <span class="chip">Rotisserie chicken (skin off)</span>
+          <span class="chip">Pre-peeled hard-boiled eggs</span>
+          <span class="chip">Sealed deli turkey breast</span>
+          <span class="chip">Frozen white fish</span>
+          <span class="chip">Frozen salmon portions</span>
+          <span class="chip">Lean beef ≥90/10</span>
+        </div>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Done bar</div><div class="v">Three picks received.</div></div>
+        <div class="crow"><div class="k">Why</div><div class="v">The pick is the client's — <strong>ownership of the choice is where adherence lives</strong>. The menu just guarantees every option is one a deficit can be built on.</div></div>
+        <div class="crow"><div class="k">What it loads</div><div class="v">The three picks are the working inventory: one becomes the anchor protein, the others are swaps when it stalls. Nothing is bought yet — buying comes with the first food task.</div></div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="c-label">Deliberately omitted from Day 0</div>
+      <p><strong>Starting weight — not captured.</strong> Starting the process outranks proving anything to the coach or to himself. Revisit if/when a measurement becomes useful to the program (see Lever 8) — not a Day 0 gate.</p>
+      <p><strong>Any food change.</strong> Nothing about his eating changes today. Day 0 is tooling and inventory only.</p>
+    </div>
+
+    <p class="exit">Exit when all three clear: <b>scale in hand</b> · <b>yogurt photos in, labels pass</b> · <b>top-3 picks received</b> → Day 1</p>
+  </section>
+
+  <!-- DAY 1 -->
+  <section class="section">
+    <div class="eyebrow">Day 1 — Water, questions, breathing room</div>
+    <h2>Light by design. One new install.</h2>
+    <p class="lead">Day 0 tasks get room to finish. Day 1 is the open-floor day.</p>
+
+    <div class="duo">
+      <span class="duo-kick">Task 1 · Morning water — starts tomorrow morning, runs daily forever</span>
+      <div class="lane send">
+        <div class="lane-label">Send to client</div>
+        <ul>
+          <li>On waking, drink <strong>2 liters of water</strong> — <strong>before coffee, before food</strong>. Big bottle, first thing. That's the whole task.</li>
+          <li><strong>Bottle check: do you have a regular-sized water bottle?</strong> If not, buy one today — a good one with a <strong>non-plastic interior</strong> (stainless steel or glass).</li>
+        </ul>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Standing</div><div class="v"><strong>Permanent habit from Day 1 forward — it never retires.</strong></div></div>
+        <div class="crow"><div class="k">Why</div><div class="v">Not disclosed as a lecture: it blunts morning appetite, displaces caloric morning drinks, and reclassifies a lot of "hunger" as thirst. <strong>First lever that quietly reduces intake without a single food rule.</strong></div></div>
+        <div class="crow"><div class="k">Note</div><div class="v">His bottle size becomes known here — Day 6's water audit does its math with it (bottles × size).</div></div>
+      </div>
+    </div>
+
+    <div class="duo">
+      <span class="duo-kick">Task 2 · Start eating the yogurt — today</span>
+      <div class="lane send">
+        <div class="lane-label">Send to client</div>
+        <ul>
+          <li>Start eating the yogurt today. <strong>Any amount</strong> — a spoonful or half a tub, doesn't matter.</li>
+          <li>You bought several brands: <strong>find the one you like best.</strong> That's the one we build on.</li>
+        </ul>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Why</div><div class="v">No serving size, no timing, no rules — <strong>pure adoption</strong>. The only output that matters is a brand preference, because adherence lives in the one he'd eat anyway.</div></div>
+      </div>
+    </div>
+
+    <div class="body">
+      <p><span class="kick">Also on Day 1</span><strong>Answer his questions.</strong> Whatever came up from Day 0 — brands, picks, logistics — handle it in chat. <strong>No other installs.</strong> If Day 0 tasks are still in flight, today is the buffer to close them out.</p>
+    </div>
+
+    <p class="exit">Exit when: <b>Day 0 fully cleared</b> · <b>water habit acknowledged</b> → Day 2</p>
+  </section>
+
+  <!-- DAY 2 -->
+  <section class="section">
+    <div class="eyebrow">Day 2 — The yogurt ritual + the meat run</div>
+    <h2>Two installs, both food. Displacement begins.</h2>
+    <p class="lead">This is the day the program starts displacing calories with structure. Nothing is restricted yet — the new foods start crowding out what they replace.</p>
+
+    <div class="callout">
+      <div class="c-label">Carrying forward — reinforce, don't re-teach</div>
+      <p><strong>Morning water continues.</strong> Emphasize: <strong>the slight excess is critical</strong> — drinking a bit more than feels necessary is the point, not a side effect. Don't let it quietly shrink to a comfortable glass.</p>
+      <p><strong>Keep eating the yogurt, any amount, any time.</strong> The free-form eating from Day 1 doesn't stop just because tonight's ritual starts.</p>
+    </div>
+
+    <div class="duo">
+      <span class="duo-kick">Task 1 · The evening ritual — tonight, then every night</span>
+      <div class="lane send">
+        <div class="lane-label">Send to client</div>
+        <ul>
+          <li>Tonight, and every night from now on: <strong>weigh out one serving of yogurt on your new scale, in grams.</strong> The serving size is on the container — read it there.</li>
+          <li>Lid on, into the fridge. <strong>That's tomorrow's breakfast, already waiting.</strong></li>
+          <li>Morning stack from here: wake → 2L water → the yogurt that's sitting there.</li>
+        </ul>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Standing</div><div class="v"><strong>Permanent ritual</strong> — evening prep, morning eat, every day.</div></div>
+        <div class="crow"><div class="k">Why</div><div class="v">The scale's <strong>first daily rep, in a zero-pressure context</strong> — weighing a food he already bought, not policing a meal. Quietly installs a fixed breakfast: the first meal the program now owns, with zero morning friction and zero morning decisions.</div></div>
+      </div>
+    </div>
+
+    <div class="duo">
+      <span class="duo-kick">Task 2 · The meat run — today: buy, cook, eat</span>
+      <div class="lane send">
+        <div class="lane-label">Send to client</div>
+        <ul>
+          <li>From your top 3: <strong>pick one, buy enough for the week, prepare it, eat it — today.</strong> Already-cooked or minimal-prep options are better.</li>
+          <li><strong>You're in the driver's seat</strong> on how it's served — seasoning, sides, prep style, your taste. Want to talk it through first? I'm here; happy to throw suggestions.</li>
+          <li><strong>Then send the full report:</strong> photo of what you made · what you picked · ingredients and/or label if one exists · how you prepped it · where you bought it · anything else relevant.</li>
+        </ul>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Done bar</div><div class="v">Photo + report received, meat eaten at least once today.</div></div>
+        <div class="crow"><div class="k">Why</div><div class="v">Day 2 is <strong>selection and starting</strong> — no quantity floor, no portion rules, no frequency target yet. Adoption first. The driver's-seat framing is the point: adherence lives in a preparation he chose. Coach's role today is consult-on-request, not prescription.</div></div>
+        <div class="crow"><div class="k">The report</div><div class="v">Richest evidence pull yet — sourcing, label literacy, and prep style in one artifact. <strong>Everything in it is calibration data for the cutting phase.</strong></div></div>
+      </div>
+    </div>
+
+    <p class="exit">Exit when: <b>tonight's yogurt serving prepped</b> · <b>meat bought, cooked, eaten, report in</b> → Day 3</p>
+  </section>
+
+  <!-- DAY 3 -->
+  <section class="section">
+    <div class="eyebrow">Day 3 — The taste checkpoint</div>
+    <h2>Quality control on the anchor protein.</h2>
+    <p class="lead">No new install. A lean meat he merely tolerates disappears from his plate by week two — today is a conversation day with one conditional task.</p>
+
+    <div class="duo">
+      <span class="duo-kick">The check-in · coach opens, in chat — three questions, in order</span>
+      <div class="lane send">
+        <div class="lane-label">Ask the client</div>
+        <ol>
+          <li><strong>"Did you like it?"</strong> Honest answer — <strong>"it was fine" counts as a no worth probing.</strong></li>
+          <li><strong>Close but not there?</strong> "Let's make it taste better." Work the <strong>preparation, not the pick</strong>: seasoning, sauce, sides, cooking method. He drives, you suggest. Small fixes here are cheaper than a swap.</li>
+          <li><strong>Not working?</strong> "Do you want to swap and try something else?" No penalty, no sunk-cost pressure. Advice when asked: <strong>pre-cooked chicken breast strips are the easiest option on the board</strong> — no prep, no skill, hard to get wrong.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="duo">
+      <span class="duo-kick">Conditional task · the swap — only if he swaps</span>
+      <div class="lane send">
+        <div class="lane-label">Send to client</div>
+        <p>Today: <strong>go buy the new pick and repeat the Day 2 task in full</strong> — buy enough for the week, prepare it, eat it, and send the same full report (photo, pick, label, prep, source, anything relevant).</p>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Timeline</div><div class="v">The swap repeats the <strong>task, not the timeline</strong> — no days lost, the program doesn't pause. Swap-and-report happens same-day.</div></div>
+        <div class="crow"><div class="k">Rule</div><div class="v"><strong>Swap the pick, never the method.</strong> If the second pick stalls too, same checkpoint again — the menu is deep enough to survive several misses.</div></div>
+        <div class="crow"><div class="k">Read</div><div class="v">A swap is signal, not failure: every rejected pick sharpens the picture of what he'll actually eat — the only picture that matters.</div></div>
+      </div>
+    </div>
+
+    <div class="body">
+      <p><span class="kick">Standing habits by end of Day 3</span>1 · 2L water on waking, before coffee, before food&ensp;&ensp;2 · Yogurt daily, any amount + evening ritual&ensp;&ensp;3 · A week of lean protein in the house, in a preparation he chose — or a same-day replacement already bought and reported.</p>
+    </div>
+
+    <p class="exit">Exit when: taste verdict delivered — <b>kept</b> (± prep upgrades) or <b>swapped</b> (new meat bought, eaten, reported same-day) → Day 4</p>
+  </section>
+
+  <!-- DAY 4 -->
+  <section class="section">
+    <div class="eyebrow">Day 4 — The ritual grows: portion the meat</div>
+    <h2>One addition, one teach, one strict rule.</h2>
+    <p class="lead">Stacked on an existing habit — and the first teach: grams of food is not grams of protein, and he almost certainly doesn't know that yet. Teach it once, simply, tonight.</p>
+
+    <div class="duo">
+      <span class="duo-kick">Task · add meat portioning to the evening ritual — tonight, then every night</span>
+      <div class="lane send">
+        <div class="lane-label">Send to client</div>
+        <ul>
+          <li>The evening ritual grows one step. After the yogurt: <strong>weigh out one portion of your cooked meat — enough for 20–40 grams of protein</strong> — container, lid, fridge. Ready to grab tomorrow, same as the yogurt.</li>
+          <li>Scale tip: empty container on the scale, hit <strong>tare/zero</strong>, then add the meat. The scale now reads just the food.</li>
+          <li>The intent behind the prep, so it's clear: <strong>the prepped food is always the first food you eat in the day.</strong> Water first, then the prepped containers, before anything else. <strong>Be strict about this one</strong> — nothing else gets eaten before it.</li>
+        </ul>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Done bar</div><div class="v">Tonight's ritual produces <strong>two containers</strong> in the fridge — yogurt and a meat portion. On his word; no photo needed for a habit extension.</div></div>
+        <div class="crow"><div class="k">Milestone</div><div class="v">First time the scale measures a <strong>target</strong> rather than just recording. He's producing portions to a spec — the core mechanic every later cutting task runs on.</div></div>
+        <div class="crow"><div class="k">The rule</div><div class="v">The eat-first rule is the program's <strong>first strict rule and first true displacement</strong>. Everything before was addition; this forces prepped food to the front of the day, on top of 2L of water — most of the morning's old intake gets crowded out without banning a single food. <strong>Keep the asymmetry:</strong> <em>what</em> he eats first is rigid; everything after is untouched.</div></div>
+      </div>
+    </div>
+
+    <div class="duo">
+      <span class="duo-kick">The teach · food grams vs protein grams — walk him through it in chat</span>
+      <div class="lane send">
+        <div class="lane-label">Tell the client — one idea only</div>
+        <p><strong>Meat is mostly water — the protein is only part of the weight.</strong> He is not learning macros; he's learning one conversion for one food.</p>
+        <p><strong>If his pick has a label</strong> (pouches, deli packs, frozen strips): use it. Find protein-per-serving, do the simple multiple with him once in chat — one pouch says 20g protein, so one pouch is a portion, done.</p>
+        <p><strong>If his pick has no label</strong> (rotisserie, home-cooked): the rule of thumb, not a spreadsheet →</p>
+      </div>
+    </div>
+
+    <div class="calc-grid">
+      <div class="calc-box">
+        <div class="calc-label">Rule of thumb</div>
+        <div class="calc-value">meat ≈ protein × 3.5</div>
+        <div class="calc-deriv">cooked lean meat is roughly 25–30% protein</div>
+      </div>
+      <div class="calc-box primary">
+        <div class="calc-label">The number to hand over</div>
+        <div class="calc-value">30g protein ≈ 100–120g meat</div>
+        <div class="calc-deriv">on the scale, cooked — that's the number</div>
+      </div>
+    </div>
+
+    <table>
+      <thead><tr><th>Pick</th><th class="num">One portion (20–40g protein)</th></tr></thead>
+      <tbody>
+        <tr><td>Cooked chicken / turkey breast, rotisserie (skin off)</td><td class="num">70–140 g</td></tr>
+        <tr><td>Cooked white fish (cod / tilapia / pollock)</td><td class="num">90–170 g</td></tr>
+        <tr><td>Cooked salmon</td><td class="num">80–160 g</td></tr>
+        <tr><td>Cooked ≥90/10 ground beef</td><td class="num">80–150 g</td></tr>
+        <tr><td>Tuna / chicken pouch or can</td><td class="num">usually 1 pouch — check label</td></tr>
+        <tr><td>Frozen grilled strips / deli turkey</td><td class="num">use the label</td></tr>
+        <tr><td>Hard-boiled eggs</td><td class="num">4–6 eggs (~6g each, count don't weigh)</td></tr>
+      </tbody>
+    </table>
+    <p class="caption">Coach-side reference — hand over only the one row that matches his pick. A client handed seven conversion rates learns none of them.</p>
+
+    <div class="callout">
+      <div class="c-label">The band retires later</div>
+      <p>The 20–40g range is the starting band. <strong>Once his meat pick is locked, pin a precise number</strong> for that specific food and retire the band. Practice first, precision once the variable is known.</p>
+    </div>
+
+    <p class="exit">Exit when: <b>teach landed (he states his one number back)</b> · <b>ritual ran with both containers</b> → Day 5</p>
+  </section>
+
+  <!-- DAY 5 -->
+  <section class="section">
+    <div class="eyebrow">Day 5 — Broccoli enters the stack</div>
+    <h2>The satiety lever that makes every later subtraction cheaper.</h2>
+    <p class="lead">One install: high-volume, high-fiber vegetable. Frozen steam-in-bag — keeps for weeks, microwaves in minutes, cheap, zero cooking skill.</p>
+
+    <div class="duo">
+      <span class="duo-kick">The opener · ask FIRST, before the task goes out</span>
+      <div class="lane send">
+        <div class="lane-label">Ask the client</div>
+        <p><strong>"Is broccoli a hard no for you?"</strong></p>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">If no-go</div><div class="v">Adjust the pick — green beans, cauliflower, mixed medley. <strong>Same frozen-bag category, same task.</strong> Don't install a food he's already decided against; adherence lives in a vegetable he'll actually eat.</div></div>
+      </div>
+    </div>
+
+    <div class="duo">
+      <span class="duo-kick">Task · buy it, learn it, sample it, stack it — today</span>
+      <div class="lane send">
+        <div class="lane-label">Send to client</div>
+        <ul>
+          <li>Buy <strong>frozen broccoli</strong> — the steam-in-bag kind, a couple of different brands. <strong>Pre-seasoned is fine if the calorie impact is minimal</strong> — light garlic-herb passes, broccoli mac &amp; cheese obviously doesn't. Common sense: seasoning yes, sauce meal no. Check the label if unsure.</li>
+          <li><strong>Learn to cook it today.</strong> It's a microwave and a few minutes — read the bag, run a batch, see what it needs (salt, seasoning, whatever makes it work — driver's seat, same as the meat).</li>
+          <li><strong>Sample some today.</strong></li>
+          <li>Tonight the ritual grows again: <strong>add a serving of broccoli</strong> (serving size on the bag) alongside the yogurt and the meat portion.</li>
+          <li><strong>This stacks on everything else.</strong> Nothing retires — water, yogurt, meat, eat-first rule all still running. The prepped food just got one container bigger.</li>
+        </ul>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Done bar</div><div class="v">Bought, sampled, and tonight's ritual produced <strong>three containers</strong>. On his word.</div></div>
+        <div class="crow"><div class="k">Why</div><div class="v">The morning stack is now water → yogurt → meat → broccoli before any old food fires. <strong>That's most of a stomach spoken for.</strong> Every subtraction from here lands on a client who is already full.</div></div>
+        <div class="crow"><div class="k">Checkpoint</div><div class="v">Taste checkpoint applies here too: if broccoli stalls in a few days, swap within the frozen-bag category — pick changes, method never does.</div></div>
+      </div>
+    </div>
+
+    <div class="compare-grid">
+      <div class="c-card positive">
+        <h3>Seasoning · passes</h3>
+        <ul>
+          <li>Salt, pepper, spices</li>
+          <li>Hot sauce, lemon</li>
+          <li>Light garlic-herb bags</li>
+          <li>Near-zero-calorie flavor — unrestricted, he drives it</li>
+        </ul>
+      </div>
+      <div class="c-card negative">
+        <h3>Sauce · fails</h3>
+        <ul>
+          <li>Cheese sauce</li>
+          <li>Butter sauce</li>
+          <li>"Mac &amp;" anything</li>
+          <li>Any sauce-based variant</li>
+        </ul>
+      </div>
+    </div>
+    <div class="arrow-note">Base plan's toppings-unrestricted logic does <span class="target">not</span> port here <span style="color:var(--text-mute)">→</span> <span class="target">a cheese-sauce bag can double the calories of the vegetable it coats, and 30 days can't absorb that.</span></div>
+
+    <p class="exit">Exit when: <b>hard-no check cleared (or pick adjusted)</b> · <b>bought, sampled, in tonight's ritual</b> → Day 6</p>
+  </section>
+
+  <!-- DAY 6 -->
+  <section class="section">
+    <div class="eyebrow">Day 6 — Catch-up + the interview</div>
+    <h2>Consolidate — and quietly load the next phase.</h2>
+    <p class="lead">No new install. Five days of stacking gets a consolidation day. Meanwhile the coach interviews: every question below is loading a future rung, and none of that is disclosed.</p>
+
+    <div class="body">
+      <p><span class="kick">The day itself</span><strong>Adjust and/or catch up.</strong> Any Day 0–5 task still open closes today. Any friction — a meat that's stalling, a ritual step that keeps slipping — gets talked through and fixed. Nothing new lands.</p>
+    </div>
+
+    <div class="duo">
+      <span class="duo-kick">Interview Q1 · Eating window</span>
+      <div class="lane send">
+        <div class="lane-label">Ask the client</div>
+        <p>"So far, about what time is the <strong>earliest</strong> you start eating? And the <strong>latest</strong>?"</p>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Loads</div><div class="v">Maps his current eating window. The eat-first rule already owns the front; the answer tells you where the <strong>back</strong> of the window sits — raw material for the future rung that trims late eating (Lever 5).</div></div>
+        <div class="crow gate"><div class="k">Never say</div><div class="v">Do not telegraph that late eating may get trimmed — that invites pre-emptive gaming of the answer. Both ends, asked neutrally, no judgment attached.</div></div>
+      </div>
+    </div>
+
+    <div class="duo">
+      <span class="duo-kick">Interview Q2 · Carb preferences — send the menu, get picks</span>
+      <div class="lane send">
+        <div class="lane-label">Ask the client</div>
+        <p>"Down the road we'll slot in some carbs. Here's a list of healthy, minimally processed options — <strong>not exhaustive</strong>, tell me if your favorite's missing. Which would you actually eat?"</p>
+        <div class="chip-list">
+          <span class="chip">White / brown rice (microwave cups count)</span>
+          <span class="chip">Potatoes — russet / gold</span>
+          <span class="chip">Sweet potatoes</span>
+          <span class="chip">Oats — plain, not sugared packets</span>
+          <span class="chip">Quinoa (microwave pouches)</span>
+          <span class="chip">Canned beans / lentils</span>
+          <span class="chip">Fruit — bananas, apples, oranges, frozen berries</span>
+          <span class="chip">Corn tortillas</span>
+        </div>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Loads</div><div class="v">Inventory for the carb install, whenever that rung fires (Day 7, Task 3). Same pattern as the protein menu: pre-screened list, his picks, ownership stays with him. <strong>No purchase, no task — preferences only.</strong></div></div>
+      </div>
+    </div>
+
+    <div class="duo">
+      <span class="duo-kick">Interview Q3 · Water audit</span>
+      <div class="lane send">
+        <div class="lane-label">Ask the client</div>
+        <p>"Accurate number, not the ideal one: how many bottles of water are you actually getting through in a day, morning included?"</p>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Loads</div><div class="v">Verifies the 2L habit is really running and calibrates total daily intake. The <strong>accurate-not-ideal framing matters</strong> — you're asking for data, not a performance. Bottle size is known from Day 1, so bottles × size does the math. Feeds Day 7, Task 1.</div></div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="c-label">Interview notes</div>
+      <p>Three questions, one sitting, kept conversational — this is the program's first data pull since Day 0, and the first one measuring <strong>him</strong> rather than his shopping. Nothing revealed about why each question is asked. <strong>Log the answers coach-side</strong> — they are the load-in for the next phase: carbs (what), eating window (when), water (whether the foundation holds).</p>
+    </div>
+
+    <p class="exit">Exit when: <b>all Day 0–5 tasks closed</b> · <b>three interview answers logged</b> → Day 7</p>
+  </section>
+
+  <!-- DAY 7 -->
+  <section class="section">
+    <div class="eyebrow">Day 7 — Week one closes</div>
+    <h2>Congratulations, then three moves.</h2>
+    <p class="lead">Day 6's interview answers get converted into rungs the day after they were gathered. Every task below is personalized off his own data: his water count, his eating time, his carb picks.</p>
+
+    <div class="duo">
+      <span class="duo-kick">Open with the congratulations — genuine, brief</span>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Shape</div><div class="v">One week in: morning owned, three foods adopted, ritual running nightly. <strong>Say it plainly</strong> — the program's first milestone acknowledgment. Then move; don't linger into ceremony.</div></div>
+      </div>
+    </div>
+
+    <div class="duo">
+      <span class="duo-kick">Task 1 · One more bottle</span>
+      <div class="lane send">
+        <div class="lane-label">Send to client</div>
+        <p>Take the daily bottle count you gave me — <strong>add one more bottle to it.</strong> That's the new daily number.</p>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Why</div><div class="v">The increment is anchored to <strong>his audited actual</strong>, not a generic target — that's why Day 6 asked for accurate-not-ideal. Morning 2L is unchanged; the added bottle lives anywhere in the rest of the day.</div></div>
+      </div>
+    </div>
+
+    <div class="duo">
+      <span class="duo-kick">Task 2 · The eating-window floor</span>
+      <div class="lane send">
+        <div class="lane-label">Send to client</div>
+        <p>You told me the earliest you start eating. <strong>Commit to never eating earlier than that time.</strong> That's now a line: no food before it, ever. (Water, black coffee, plain tea — fine.)</p>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Why</div><div class="v">Costs him <strong>nothing today</strong> — his own stated behavior, formalized: the cheapest commitment in the program. Its value is structural: the front of the eating window is now a <strong>rule</strong> instead of a tendency, and a rule has a handle — Lever 5 will move it.</div></div>
+        <div class="crow gate"><div class="k">Never say</div><div class="v">The back of the window (late eating) stays untouched and unmentioned, same as Day 6.</div></div>
+        <div class="crow"><div class="k">Compose</div><div class="v">The floor and the eat-first rule compose cleanly — nothing before the floor time, and the first thing after it is the prepped food.</div></div>
+      </div>
+    </div>
+
+    <div class="duo">
+      <span class="duo-kick">Task 3 · The carb — coach picks, client buys today</span>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side · runs BEFORE the send</div>
+        <div class="crow"><div class="k">Select</div><div class="v">Review his Day 6 picks and <strong>select one — the coach chooses this time</strong>. Criteria, in order: (1) on his preference list, (2) portions cleanly on the scale or by unit, (3) minimal prep / no spoilage clock. Microwave rice cups, potatoes, plain oats are the archetypes.</div></div>
+        <div class="crow"><div class="k">Why coach</div><div class="v">His ownership was already banked in the Day 6 preference list, and week two doesn't need another selection deliberation. Pick from his list = still his food, zero decision cost.</div></div>
+      </div>
+      <div class="lane send">
+        <div class="lane-label">Send to client</div>
+        <ul>
+          <li>"From your list, we're starting with <strong>[the pick]</strong>. Go buy it today — enough for the week."</li>
+          <li>Tonight the ritual grows one more step: <strong>add one serving</strong> (serving size on the label; a potato or a piece of fruit counts as one serving) alongside the yogurt, meat, and broccoli.</li>
+          <li>Same as everything else: <strong>this stacks. Nothing retires.</strong></li>
+        </ul>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Done bar</div><div class="v">Bought today, tonight's ritual produced <strong>four containers</strong>.</div></div>
+        <div class="crow"><div class="k">Free ride</div><div class="v">The carb rides inside the prepped containers, so it's automatically governed by the eat-first rule — no new rule needed. Taste checkpoint applies as always: stalls → swap within his list, method unchanged.</div></div>
+      </div>
+    </div>
+
+    <div class="body">
+      <p><span class="kick">The board after Day 7</span><strong>Standing daily:</strong> floor time → 2L water → prepped containers first (yogurt + meat + broccoli + carb) → audited bottles + 1 through the day → evening ritual preps tomorrow.</p>
+      <p><strong>Still true: not one food from his old diet has been banned.</strong> The program has occupied territory entirely by addition, ordering, and formalizing his own habits back at him.</p>
+    </div>
+
+    <p class="exit">Exit when: <b>congrats delivered</b> · <b>new water number acknowledged</b> · <b>floor time stated back + committed</b> · <b>carb bought, four-container ritual ran</b> → Phase 2</p>
+  </section>
+
+  <!-- PHASE 2 — LEVER BOARD -->
+  <section class="section">
+    <div class="eyebrow">Phase 2 — Days 8–30 · Dynamic adjustment</div>
+    <h2>The format changes here. You think; he receives.</h2>
+    <p class="lead">Week one was a script. From Day 8 the coach thinks for the client and pulls levers based on what his data and check-ins show. No fixed rungs — nine levers, an order they fire in, and the reads that trigger them. He never sees this machinery; he just gets one adjustment at a time, same as week one.</p>
+
+    <div class="lever-grid">
+      <div class="lever">
+        <div class="lever-num">LEVER 1</div>
+        <div class="lever-name">Protein up</div>
+        <div class="lever-what">Bigger portions or new options, week-one style. Quiet PSMF prep.</div>
+        <div class="lever-gate">none — first to fire</div>
+      </div>
+      <div class="lever">
+        <div class="lever-num">LEVER 2</div>
+        <div class="lever-name">Carb math</div>
+        <div class="lever-what">Coach-side servings calculation to a good caloric range inside a deficit.</div>
+        <div class="lever-gate">coach-side only</div>
+      </div>
+      <div class="lever">
+        <div class="lever-num">LEVER 3</div>
+        <div class="lever-name">Calories down</div>
+        <div class="lever-what">Incremental trims. Carbs are the dial — protein &amp; veg never cut.</div>
+        <div class="lever-gate">plate built (L1+L2)</div>
+      </div>
+      <div class="lever">
+        <div class="lever-num">LEVER 4</div>
+        <div class="lever-name">The check-in</div>
+        <div class="lever-what">Standing pulse: adherence, issues, feelings. Gates every other lever.</div>
+        <div class="lever-gate">always on</div>
+      </div>
+      <div class="lever">
+        <div class="lever-num">LEVER 5</div>
+        <div class="lever-name">Push the floor back</div>
+        <div class="lever-what">2-hour increments toward regular fasting — never named as such.</div>
+        <div class="lever-gate">each push held until it feels like nothing</div>
+      </div>
+      <div class="lever">
+        <div class="lever-num">LEVER 6</div>
+        <div class="lever-name">Steps</div>
+        <div class="lever-what">10–15k steps/day. The program's only movement install.</div>
+        <div class="lever-gate">nutrition installed &amp; stable</div>
+      </div>
+      <div class="lever">
+        <div class="lever-num">LEVER 7</div>
+        <div class="lever-name">PSMF tests → final week</div>
+        <div class="lever-what">1-day test → read → 2-day test → read. Final week PSMF only if earned.</div>
+        <div class="lever-gate">clean test responses</div>
+      </div>
+      <div class="lever">
+        <div class="lever-num">LEVER 8</div>
+        <div class="lever-name">The weigh-in ask</div>
+        <div class="lever-what">Soft ask for a weekly number. A no is survivable.</div>
+        <div class="lever-gate">early Phase 2 · ask, never mandate</div>
+      </div>
+      <div class="lever">
+        <div class="lever-num">LEVER 9</div>
+        <div class="lever-name">The simplification</div>
+        <div class="lever-what">"Life is simple": total lockdown + unlimited zero-calorie drinks.</div>
+        <div class="lever-gate">plate fully built &amp; feeding him</div>
+      </div>
+    </div>
+
+    <!-- LEVER 1 -->
+    <div class="lever-sec">
+      <h3><span class="ln">LEVER 1</span>Protein up</h3>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Routes</div><div class="v">Two: <strong>bigger portions</strong> of current foods (the Day 4 number moves up), or <strong>new options, week-one style</strong> — pick from his top 3 / the menu, buy, adopt, portion into the ritual. Same pattern, no new teaching needed.</div></div>
+        <div class="crow"><div class="k">Direction</div><div class="v">Protein becomes the backbone of every eating day. Also <strong>quiet PSMF prep</strong> — the higher his comfortable protein baseline, the cheaper a PSMF day is later (Lever 7).</div></div>
+      </div>
+    </div>
+
+    <!-- LEVER 2 -->
+    <div class="lever-sec">
+      <h3><span class="ln">LEVER 2</span>Carb math — coach-side</h3>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Compute</div><div class="v">How many healthy-carb servings bring him to a <strong>good caloric range</strong> — enough to make the day satisfying and sustainable, sitting inside a deficit.</div></div>
+        <div class="crow gate"><div class="k">Never say</div><div class="v">He experiences this as <strong>"add another rice cup at dinner," never as arithmetic</strong>. All math stays coach-side — the base plan's never-reveal-the-numbers rule ports to this timeline intact.</div></div>
+      </div>
+    </div>
+
+    <!-- LEVER 3 -->
+    <div class="lever-sec">
+      <h3><span class="ln">LEVER 3</span>Calories down</h3>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow gate"><div class="k">Gate</div><div class="v">The plate is built — Levers 1–2 running.</div></div>
+        <div class="crow"><div class="k">Method</div><div class="v"><strong>Incremental decreases</strong> to deepen the deficit. <strong>Carbs are the dial — protein and vegetables don't get cut.</strong> Increments small, one at a time, each held long enough to read his response before the next.</div></div>
+        <div class="crow gate"><div class="k">Never say</div><div class="v">He hears "we're trimming the rice to one cup" — never a calorie number.</div></div>
+      </div>
+    </div>
+
+    <!-- LEVER 4 -->
+    <div class="lever-sec">
+      <h3><span class="ln">LEVER 4</span>The check-in — standing, throughout</h3>
+      <div class="lane send">
+        <div class="lane-label">Tell the client — directly</div>
+        <p>Regular pulse on <strong>adherence, issues, and how he's feeling</strong>. Tell him: <strong>his feelings are important data.</strong> The process — and the coach's job — is to make all of this <strong>effortless for him, as it should be</strong>. Friction reported = the program adjusts, not the client toughing it out.</p>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Function</div><div class="v">The check-in is <strong>the gate on every other lever</strong>. Nothing escalates onto a client who's straining. Feelings are the instrument panel for Levers 3, 5, 6, and 7.</div></div>
+      </div>
+    </div>
+
+    <!-- LEVER 5 -->
+    <div class="lever-sec">
+      <h3><span class="ln">LEVER 5</span>Push the floor back — toward regular fasting</h3>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Method</div><div class="v">The Day 7 floor moves <strong>back in 2-hour increments</strong> — one push at a time, each held until it feels like nothing, then the next. Slowly walks him into regular fasting <strong>without ever naming a protocol</strong>.</div></div>
+        <div class="crow"><div class="k">Tell him</div><div class="v"><strong>Stay caffeinated through the window: coffee, tea, sparkling water</strong> — all fine before the floor, all appetite management.</div></div>
+        <div class="crow"><div class="k">Compose</div><div class="v">Every push shortens the eating window and drags the eat-first stack later into the day — the prepped food starts owning an even larger share of total intake, <strong>for free</strong>.</div></div>
+      </div>
+    </div>
+
+    <!-- LEVER 6 -->
+    <div class="lever-sec">
+      <h3><span class="ln">LEVER 6</span>Steps — only when nutrition is running</h3>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow gate"><div class="k">Gate</div><div class="v">The nutritional elements are <strong>installed and stable</strong>. Then, and only then: <strong>10–15k steps per day</strong>.</div></div>
+        <div class="crow"><div class="k">Why walking</div><div class="v">The program's only movement install — consistent with the base ethos: no gym in 30 days; walking is the deficit lever with near-zero adherence cost and no skill requirement.</div></div>
+      </div>
+    </div>
+
+    <!-- LEVER 7 -->
+    <div class="lever-sec">
+      <h3><span class="ln">LEVER 7</span>PSMF tests → final week</h3>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Test day</div><div class="v"><strong>Occasional single-day PSMF tests</strong>: eat only the prepped protein + vegetables — the carb sits out for the day. The ritual has been quietly assembling the PSMF food set since Day 5; a test day is <strong>subtraction from an existing routine, not a new protocol</strong>.</div></div>
+        <div class="crow"><div class="k">Sequence</div><div class="v"><strong>1-day test → read response → 2-day test → read response.</strong> Response = adherence held, feelings steady at check-in, no rebound blowout after.</div></div>
+        <div class="crow gate"><div class="k">Earn it</div><div class="v"><strong>The final week is a PSMF — if he's responsive.</strong> Earned by test results, not scheduled regardless. If tests showed strain, the final week stays a regular deficit — <strong>and that is a fine outcome</strong>.</div></div>
+      </div>
+    </div>
+
+    <!-- LEVER 8 -->
+    <div class="lever-sec">
+      <h3><span class="ln">LEVER 8</span>The weigh-in ask — soft, early in Phase 2</h3>
+      <div class="lane send">
+        <div class="lane-label">Pitch shape</div>
+        <p>"One number a week helps me steer this for you. Same conditions every time — morning, after bathroom, before food or water. You never have to like the number; it's for me, not a scorecard."</p>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">Framing</div><div class="v">An <strong>ask, not a mandate</strong> — Day 0 deliberately skipped the scale, and that grace doesn't get revoked by decree.</div></div>
+        <div class="crow"><div class="k">If yes</div><div class="v">Log weekly, same conditions each time. Becomes the <strong>primary responsiveness read for Levers 3 and 7</strong> — calorie trims and PSMF earn/hold decisions.</div></div>
+        <div class="crow"><div class="k">If no</div><div class="v"><strong>Don't push.</strong> Steer on secondary instruments — adherence, check-in feel, clothes fitting, energy. The program survives without the scale; it's just steering with one less gauge.</div></div>
+      </div>
+    </div>
+
+    <!-- LEVER 9 -->
+    <div class="lever-sec">
+      <h3><span class="ln">LEVER 9</span>The simplification — "from now on, life is simple"</h3>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side · gate first</div>
+        <div class="crow gate"><div class="k">Gate</div><div class="v">Fires <strong>only once the plate is fully built</strong> — Levers 1–2 running, protein backbone + calculated carbs feeding him properly. <strong>You cannot ban food outside the plan until the plan is feeding him enough</strong>; before that, this rule just creates hunger with nowhere to go.</div></div>
+      </div>
+      <div class="lane send">
+        <div class="lane-label">Send to client — plainly</div>
+        <p>"From now on, life is simple. <strong>No alcohol, no drinks with calories, no dessert, no food outside our plan.</strong> And here's the fun part: <strong>go find every zero-calorie soda and drink you like — those are unlimited. Enjoy them.</strong>"</p>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">What it is</div><div class="v">The program's <strong>total-lockdown moment</strong> — the black box of untracked eating closes in one move. Everything before was addition and ordering; this single decree converts the plan from "part of his day" to <strong>his entire intake</strong>.</div></div>
+        <div class="crow"><div class="k">The hunt</div><div class="v">The zero-calorie hunt is <strong>load-bearing, not a consolation</strong>: an active, immediate <em>yes</em> alongside the <em>no</em>, keeps the flavor habit's slot filled, and mirrors the buy-several-brands pattern he already knows from yogurt and broccoli.</div></div>
+        <div class="crow"><div class="k">Payoff</div><div class="v">Once this fires, Levers 2 and 3 get vastly sharper — with no black box, coach-side calorie math is close to exact.</div></div>
+      </div>
+    </div>
+
+    <!-- SEQUENCING -->
+    <div class="lever-sec">
+      <h3><span class="ln">ARC</span>Sequencing — loose, adjust freely</h3>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-stage">~Days 8–12</div>
+          <ul>
+            <li>Levers 1–2: build the full plate — protein up, carbs calculated in</li>
+            <li>First floor push (Lever 5)</li>
+            <li>Weigh-in ask (Lever 8) early here</li>
+          </ul>
+        </div>
+        <div class="tl-item">
+          <div class="tl-stage">~Days 13–18</div>
+          <ul>
+            <li>Simplification (Lever 9) fires once the plate is built</li>
+            <li>Lever 3 begins: first calorie trims</li>
+            <li>Second floor push</li>
+            <li>Lever 6 fires if nutrition is stable — steps in</li>
+          </ul>
+        </div>
+        <div class="tl-item">
+          <div class="tl-stage">~Days 19–23</div>
+          <ul>
+            <li>First 1-day PSMF test; if clean, 2-day test a few days later</li>
+            <li>Deficit continues between tests</li>
+          </ul>
+        </div>
+        <div class="tl-item">
+          <div class="tl-stage">~Days 24–30</div>
+          <ul>
+            <li>Final week: PSMF if earned, deeper regular deficit if not</li>
+            <li>Day 30 close-out</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- OPERATING RULES -->
+    <div class="lever-sec">
+      <h3><span class="ln">RULES</span>Phase 2 operating rules</h3>
+      <div class="body">
+        <p><span class="kick">1 · One lever per adjustment</span>Never two changes at once — otherwise a bad read can't be attributed.</p>
+        <p><span class="kick">2 · The check-in gates everything</span>A strained client gets consolidation, not escalation. Week one's install-install-consolidate cadence continues; consolidation days are still real days.</p>
+        <p><span class="kick">3 · Numbers stay coach-side</span>Calories, deficits, the word "PSMF," the fasting endgame of the floor pushes — none of it is disclosed. He receives food-level instructions only.</p>
+        <p><span class="kick">4 · Protein and vegetables are never the cut</span>Carbs are the calorie dial; the ritual's protein core only ever grows or holds.</p>
+        <p><span class="kick">5 · Swap-don't-force survives all phases</span>Any food that stalls gets swapped within its category, at any point, without resetting anything.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DAY 31+ EXIT RAMP -->
+  <section class="section">
+    <div class="eyebrow">Day 31+ — The exit ramp</div>
+    <h2>The program does not end on its most aggressive protocol.</h2>
+    <p class="lead">After the PSMF — whether the final week or the last test — the client comes back to the previous routine: the built plate he ran before the PSMF began.</p>
+
+    <div class="duo">
+      <span class="duo-kick">End of Day 30 / end of the PSMF</span>
+      <div class="lane send">
+        <div class="lane-label">Send to client</div>
+        <p>"The push is done. <strong>We go back to exactly what you were doing before this week</strong> — same ritual, same containers, same floor time, same drinks rules. Nothing new to learn; you already lived it."</p>
+      </div>
+      <div class="lane coach">
+        <div class="lane-label">Coach-side</div>
+        <div class="crow"><div class="k">The return</div><div class="v">To the <strong>pre-PSMF deficit routine, not to his old life</strong> — ritual, eat-first, floor time, simplification rules all keep running. The PSMF was a temporary deepening inside a structure that never stopped.</div></div>
+        <div class="crow"><div class="k">After</div><div class="v">What happens beyond Day 31+ — maintenance, a second cut, transition into the long-game base plan — is a <strong>separate conversation, held then</strong>.</div></div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="c-label">Warn the bounce — before it happens</div>
+      <p>Expect the scale to bounce a few lbs as carbs and their water return. Tell him in plain terms, in advance: <strong>"the scale will tick up a couple pounds this week — that's water coming back with the carbs, not fat. It's expected and it's fine."</strong> An unwarned bounce is how clients torch a real result.</p>
+    </div>
+  </section>
+
+  <footer>30-Day Fat Loss · Coach's Playbook — coach-side only · client edition ships separately</footer>
+
+</div>
+</body>
+</html>
